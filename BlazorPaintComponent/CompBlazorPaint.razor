@@ -1,0 +1,221 @@
+﻿@inherits CompBlazorPaint_Logic
+@using System
+@using System.Linq
+@*@using System.Net.Http*@
+@using Microsoft.JSInterop
+@implements System.IDisposable
+@inject IJSRuntime JsRuntime
+
+<BPaintJsInterop_component></BPaintJsInterop_component>
+
+
+<style>
+    .outlined {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 1rem;
+        padding: 1rem;
+        display: inline-block;
+        background-color: #E9F4FF;
+    }
+    .outlined_info {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 1rem;
+        padding: 1rem;
+        display: inline-block;
+        background-color: #ffffff;
+    }
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;
+    }
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #F4E9FF;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+    .btn-with-icons {
+        padding: 0.5rem;
+    }
+</style>
+
+
+<div style="width: 100%">
+    <table width="100%">
+        
+        <tr>
+            <td style="width: 200px" valign="top">
+                <div  id="OperationalModeGroup" class="outlined" style="line-height: 25px; width: 200px;">
+                    <fieldset>
+                        <legend>Mode</legend>
+                        <button id="btnSelectMode" title="Select mode" class="@btnSelectMode_CSSclass" style="cursor: default" @onclick="btnSelectMode_onClick">
+                            <svg id="btnSelectModeSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" fill="black" stroke="black" viewBox="0 0 469.343 469.343" style="enable-background:new 0 0 469.343 469.343;" xml:space="preserve">
+                                <path d="M380.885,280.457L103.552,3.124c-3.051-3.051-7.616-3.968-11.627-2.304c-3.989,1.643-6.592,5.547-6.592,9.856v384
+                                        c0,4.053,2.283,7.723,5.909,9.536c3.605,1.813,7.936,1.451,11.157-1.003l75.093-56.32l58.283,116.565
+                                        c1.877,3.733,5.632,5.888,9.557,5.888c1.621,0,3.243-0.363,4.757-1.131l85.333-42.667c5.269-2.645,7.424-9.045,4.779-14.315
+                                        l-56.277-112.555h89.408c4.309,0,8.213-2.603,9.856-6.592C384.853,288.095,383.936,283.508,380.885,280.457z M266.667,277.343
+                                        c-3.691,0-7.125,1.92-9.067,5.056c-1.941,3.136-2.133,7.061-0.469,10.368l59.221,118.464l-66.24,33.131l-59.221-118.464
+                                        c-1.429-2.837-4.011-4.885-7.104-5.611c-0.811-0.192-1.621-0.277-2.453-0.277c-2.283,0-4.523,0.747-6.4,2.133l-68.267,51.2V36.425
+                                        l240.917,240.917H266.667z"/>
+                            </svg>
+                        </button>
+                        &nbsp;
+                        <button id="btnDrawMode" title="Labeling mode" class="@btnDrawMode_CSSclass" style="cursor: default" @onclick="btnDrawMode_onClick">
+                            <svg id="btnDrawModeSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" fill="black" stroke="black" viewBox="0 0 60.017 60.017" style="enable-background:new 0 0 60.017 60.017;" xml:space="preserve">
+                                <path d="M59.144,3.731l-2.85-2.851c-1.164-1.161-3.057-1.162-4.221,0.001l-3.126,3.126H0v56h56V11.097l0.305-0.305l0,0l2.839-2.839 
+                                        C60.308,6.789,60.308,4.895,59.144,3.731z M20.047,36.759l3.22,3.22l-4.428,1.208L20.047,36.759z M52.062,12.206L47.82,7.964
+                                        l1.414-1.414l4.243,4.242L52.062,12.206z M50.648,13.62L25.192,39.076l-4.242-4.242L46.406,9.378L50.648,13.62z M54,13.097v44.91H2
+                                        v-52h44.947L18.829,34.127l-0.188,0.188l-2.121,7.779l-1.226,1.226c-0.391,0.391-0.391,1.023,0,1.414
+                                        c0.195,0.195,0.451,0.293,0.707,0.293s0.512-0.098,0.707-0.293l1.226-1.226l7.779-2.123l26.351-26.35h0l0.447-0.447L54,13.097z
+                                        M57.73,6.539l-2.839,2.839l-4.243-4.243l2.839-2.839c0.384-0.384,1.009-0.383,1.393,0l2.85,2.85
+                                        C58.114,5.529,58.114,6.155,57.73,6.539z"/>
+                            </svg>
+                        </button>
+                    </fieldset>
+                </div>
+            </td>
+            <td style="width: 800px" valign="top">
+                <div id="SelectionAndEditActions" class="outlined" style="line-height: 25px; width: 80%; height: 90%">
+                    <fieldset>
+                        <legend>Commands</legend>
+                        <button id="btnSelectAll" class="btn btn-primary btn-with-icons" title="Select all" style="cursor: default" @onclick="btnSelectAll_onClick" disabled="@btnSelectAllDisabled">
+                            <svg id="btnSelectAllSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" x="0px" y="0px" viewBox="0 0 512 512" fill="black" stroke="black" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                <rect width="32" height="32" /><rect x="80" width="32" height="32" /><rect x="160" width="32" height="32" /><rect x="240" width="32" height="32" /><rect x="320" width="32" height="32" />
+                                <rect x="400" width="32" height="32" /><rect x="480" width="32" height="32" /><rect y="480" width="32" height="32" /><rect x="80" y="480" width="32" height="32" /><rect x="160" y="480" width="32" height="32" />
+                                <rect x="240" y="480" width="32" height="32" /><rect x="320" y="480" width="32" height="32" /><rect x="400" y="480" width="32" height="32" /><rect y="400" width="32" height="32" />
+                                <rect y="320" width="32" height="32" /><rect y="240" width="32" height="32" /><rect y="160" width="32" height="32" /><rect y="80" width="32" height="32" /><rect x="480" y="400" width="32" height="32" />
+                                <rect x="480" y="320" width="32" height="32" /><rect x="480" y="240" width="32" height="32" /><rect x="480" y="160" width="32" height="32" /><rect x="480" y="80" width="32" height="32" />
+                                <rect x="480" y="480" width="32" height="32" />
+                                <path d="M96,416h320V96H96V416z M128,128h256v256H128V128z" />
+                            </svg>
+                        </button>
+                        <button id="btnDeleteSelectedObjects" class="btn btn-primary btn-with-icons" title="Delete selected" style="cursor: default" @onclick="btnDeleteSelectedObjects_onClick" disabled="@btnDeleteSelectedDisabled">
+                            <svg id="btnDeleteSelectedObjectsSVGicon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" x="0px" y="0px" viewBox="0 0 512 512" fill="black" stroke="black" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                                <path d="M0,464c0,26.51,21.49,48,48,48h224c26.51,0,48-21.49,48-48V128H0V464z M32,160h256v304c0,8.837-7.163,16-16,16H48 c-8.837,0-16-7.163-16-16V160z"/>
+                                <rect x="192" y="192" width="32" height="256"/><rect x="96" y="192" width="32" height="256"/><path d="M224,0H96v64H0v32h320V64h-96V0z M192,64h-64V32h64V64z"/><rect x="352" y="224" width="96" height="32"/>
+                                <rect x="480" y="224" width="32" height="32"/><rect x="384" y="320" width="64" height="32"/><rect x="480" y="320" width="32" height="32"/>
+                            </svg>
+                        </button>
+                    </fieldset>
+                </div>
+            </td>
+            <td>
+                <div id="InfoText" class="outlined_info" style="line-height: 25px; width: 100%; height: 90%">
+                    <label>
+                        Current operational mode: @CurrOperationalMode
+                    </label>
+                    <br />
+                    <label>
+                        Current selection mode: @CurrSelectionMode
+                    </label>
+                    <br />
+                    <label>
+                        Current mode: @CurrPaintMode
+                    </label>
+                    <br />
+                    <label>
+                        Current object editing: @strCurrentlyEditingObject()
+                    </label>
+                    <br />
+                    <label>
+                        Current mouse location: @strCurrMouseLocation
+                    </label>
+                    <br />
+                    <label>
+                        Current SVG area location: @strCurrSVGareaLocation
+                    </label>
+                    <br />
+                    <label>
+                        Vertices count: @(VerticesList.Count)
+                    </label>
+                    <br />
+                    <label>
+                        bpSelectionRectangle is null: @(bpSelectionRectangle == null)
+                    </label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" valign="bottom">
+                <input type="radio" name="mode" value="2" checked="@(FigureCode == 2)" @onchange="(() => FigureCode = 2)" /> Line
+                <input type="radio" name="mode" value="3" checked="@(FigureCode == 3)" @onchange="(() => FigureCode = 3)" /> Vertex
+                <input type="radio" name="mode" value="4" checked="@(FigureCode == 4)" @onchange="(() => FigureCode = 4)" /> Circle
+                <input type="radio" name="mode" value="5" checked="@(FigureCode == 5)" @onchange="(() => FigureCode = 5)" /> Ellipse
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button class="btn btn-primary" style="cursor: default" @onclick="btnStartWebAPIsession_onClick">Start web API session</button>
+                &nbsp;
+                <button class="btn btn-primary" style="cursor: default" @onclick="btnPrevExample_onClick">Previous example</button>
+                @*<button class="btn btn-primary" style="cursor: default" @onclick="btnSaveCurrExampleLabels_onClick">Save labels</button>*@
+                <button class="btn btn-primary" style="cursor: default" @onclick="btnnextExample_onClick">Next example</button>
+                <br />
+                <label>web API session started: @webAPIsessionStarted</label>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <br />
+                <input bind="@Color1" type="color" @oninput="cmd_ColorChange" />
+
+                <CompUsedColors @ref="Curr_CompUsedColors" @ref:suppressField parent="@this"></CompUsedColors>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2" valign="top">
+                <div style="position: absolute">
+                    <img id="BackgroundImage" src="@CurrentBackgroundImageURI" width="1200" height="1200" style="position: absolute">
+                </div>
+
+                <div style="position: relative; background-color: rgba(0, 0, 0, 0.0)" id="PaintArea1" width="1200" height="1200" @onmousedown="onMouseDown" @onmousemove="onMouseMove" @onmouseup="onMouseUp">
+                    <CompMySVG @ref="Curr_CompMySVG" @ref:suppressField parent="@this" par_width="1200" par_height="1200"></CompMySVG>
+                </div>
+            </td>
+
+            <td valign="top">
+                <label>Objects List</label>
+                <br />
+                @if (ObjectsList.Any())
+                {
+                    @foreach (var obj in ObjectsList.OrderBy(x => x.SequenceNumber))
+                    {
+                        <CompListItem Par_ID="@obj.ObjectID" parent="@this"></CompListItem>
+                        <br />
+                    }
+
+                }
+            </td>
+        </tr>
+    </table>
+</div>
