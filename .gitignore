@@ -351,3 +351,4 @@ MigrationBackup/
 SunDiskLabelingApp_ClientSide/wwwroot
 todo.json
 tdg.log
+send_todo.bat
