@@ -21,6 +21,15 @@ namespace BlazorPaintComponent
 {
     public class CompBlazorPaint_Logic : ComponentBase
     {
+        /*
+         TODO: Objects list appearance
+         category=Apeearance issue=none estimate=2h
+         The label "Objects list": align it with the labels of service information like "Current operational mode" etc.
+         Rename "Objects list" to "Labels list" or "Labels"
+         Make the list of labels visually the same as service information: div, outline
+         */
+
+
         bool IsCompLoadedAtLeastOnce = false;
 
 
