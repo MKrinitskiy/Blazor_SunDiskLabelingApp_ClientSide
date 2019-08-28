@@ -43,7 +43,8 @@ namespace BlazorPaintComponent
         public List<BPaintVertex> SelectionVerticesList = new List<BPaintVertex>();
 
 
-        protected string Color1 = "#ffffff";//"#fc3807";
+        //protected string Color1 = "#ffffff";//"#fc3807";
+        protected string Color1 = "#000000";//"#fc3807";
 
         protected int LineWidth1 = 3;
 
