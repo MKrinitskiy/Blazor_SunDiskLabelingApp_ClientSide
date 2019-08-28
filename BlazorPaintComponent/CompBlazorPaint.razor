@@ -201,20 +201,24 @@
         *@
         <tr>
             <td colspan="2">
+                @*
+                // TODO: Remove btnStartWebAPIsession button; make session to be initialized lazy.
+                // category=Client-server-interface issue=none estimate=6h
+                *@
                 <button class="btn btn-primary" id="btnStartWebAPIsession" style="cursor: default" @onclick="btnStartWebAPIsession_onClick">Start web API session</button>
                 &nbsp;
                 <button class="btn btn-primary" id="btnPrevExample" style="cursor: default" @onclick="btnPrevExample_onClick">Previous example</button>
                 @*
-                // TODO: Change the icon of the btnPrevExample button
-                // category=Appearance issue=none estimate=1h
-                // Chenge text to icon
+        // TODO: Change the icon of the btnPrevExample button
+        // category=Appearance issue=none estimate=1h
+        // Chenge text to icon
                 *@
                 @*<button class="btn btn-primary" style="cursor: default" @onclick="btnSaveCurrExampleLabels_onClick">Save labels</button>*@
                 <button class="btn btn-primary" id="btnNextExample" style="cursor: default" @onclick="btnNextExample_onClick">Next example</button>
                 @*
-                // TODO: Change the icon of the btnNextExample button
-                // category=Appearance issue=none estimate=1h
-                // Chenge text to icon
+        // TODO: Change the icon of the btnNextExample button
+        // category=Appearance issue=none estimate=1h
+        // Chenge text to icon
                 *@
                 <br />
                 <label>web API session started: @webAPIsessionStarted</label>
