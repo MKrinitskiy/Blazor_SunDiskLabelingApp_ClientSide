@@ -21,6 +21,13 @@ namespace BlazorPaintComponent
 {
     public class CompBlazorPaint_Logic : ComponentBase
     {
+        // TODO: Implement saving/storing(serverside)/restoring labels.
+        // category=functionality issue=none estimate=12h
+        // While saving labels the app should send it to server and perhaps give a user an opportunity to download it
+
+        // TODO: Implement selection. It doesn't work at the moment
+        // category=functionality issue=none estimate=12h
+
         bool IsCompLoadedAtLeastOnce = false;
 
 
