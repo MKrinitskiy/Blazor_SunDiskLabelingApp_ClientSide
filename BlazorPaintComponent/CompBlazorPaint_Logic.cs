@@ -236,7 +236,7 @@ namespace BlazorPaintComponent
         }
 
 
-        protected void btnnextExample_onClick()
+        protected void btnNextExample_onClick()
         {
             RequestNextExample();
         }
