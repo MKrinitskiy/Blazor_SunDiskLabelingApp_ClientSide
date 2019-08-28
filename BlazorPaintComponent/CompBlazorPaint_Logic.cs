@@ -52,7 +52,7 @@ namespace BlazorPaintComponent
         public BPaintVertex bpVertexUnderMousePointer = null;
         public BPaintVertex bpSelectionVertexUnderMousePointer = null;
 
-        protected int FigureCode = 2;
+        protected int FigureCode = 4;
 
         protected PointD currMouseLocation = PointD.nullPointD();
         protected string strCurrMouseLocation = "";

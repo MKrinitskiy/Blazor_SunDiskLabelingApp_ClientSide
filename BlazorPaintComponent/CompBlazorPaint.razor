@@ -185,13 +185,12 @@
                 </div>
             </td>
         </tr>
+        @*
         <tr>
             <td colspan="2" valign="bottom">
-                @*
-                // TODO: Leave Circle category of labels only
+                // DONE: Leave Circle category of labels only
                 // category=Appearance issue=none estimate=1h
                 // Just for this project only. So there will be no need for a selector of labels type
-                *@
                 <input type="radio" name="mode" value="2" checked="@(FigureCode == 2)" @onchange="(() => FigureCode = 2)" /> Line
                 <input type="radio" name="mode" value="3" checked="@(FigureCode == 3)" @onchange="(() => FigureCode = 3)" /> Vertex
                 <input type="radio" name="mode" value="4" checked="@(FigureCode == 4)" @onchange="(() => FigureCode = 4)" /> Circle
@@ -199,6 +198,7 @@
             </td>
             <td>&nbsp;</td>
         </tr>
+        *@
         <tr>
             <td colspan="2">
                 <button class="btn btn-primary" id="btnStartWebAPIsession" style="cursor: default" @onclick="btnStartWebAPIsession_onClick">Start web API session</button>
