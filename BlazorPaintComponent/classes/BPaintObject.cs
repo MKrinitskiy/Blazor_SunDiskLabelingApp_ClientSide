@@ -8,7 +8,7 @@ using Geometry;
 namespace BlazorPaintComponent.classes
 {
     [Serializable]
-    public class BPaintObject : IBPaintObject
+    public class BPaintObject : BPBoundable, IBPaintObject
     {
         public int ObjectID { get; set; }
         public bool Selected { get; set; }
@@ -34,11 +34,16 @@ namespace BlazorPaintComponent.classes
         public PointD Scale { get; set; } = new PointD(0, 0);
         public BPaintOpbjectType ObjectType { get; set; }
 
+        
         public List<BPaintVertex> VerticesList = new List<BPaintVertex>();
 
         public SVGtransform transform { get; set; } = new SVGtransform();
 
         public int MandatoryVerticesCount { get; set; }
 
+        public override RectD BoundingRectD(bool padding = true)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

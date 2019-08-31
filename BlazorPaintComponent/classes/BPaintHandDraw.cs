@@ -19,5 +19,11 @@ namespace BlazorPaintComponent.classes
 
         }
 
+
+
+        public override RectD BoundingRectD(bool padding = true)
+        {
+            return BPaintFunctions.Get_Border_Points(this, padding:padding);
+        }
     }
 }

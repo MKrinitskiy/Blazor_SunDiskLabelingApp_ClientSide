@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Geometry;
 
 namespace BlazorPaintComponent.classes
 {
@@ -32,6 +33,10 @@ namespace BlazorPaintComponent.classes
             return (!end.Equals(Position));
         }
 
-        
+
+        public override RectD BoundingRectD(bool padding = true)
+        {
+            return BPaintFunctions.Get_Border_Points(this, padding: padding);
+        }
     }
 }

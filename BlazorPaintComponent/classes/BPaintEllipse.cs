@@ -210,6 +210,11 @@ namespace BlazorPaintComponent.classes
             return (!((Position.Equals(pt2)) & (Position.Equals(pt3))));
         }
 
-        
+
+
+        public override RectD BoundingRectD(bool padding = true)
+        {
+            return BPaintFunctions.Get_Border_Points(this, padding:padding);
+        }
     }
 }

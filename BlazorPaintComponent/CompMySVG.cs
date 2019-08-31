@@ -107,7 +107,7 @@ namespace BlazorPaintComponent
 
                 if (currLine.Selected)
                 {
-                    RectD p_rect = BPaintFunctions.Get_Border_Points(currLine as BPaintLine);
+                    RectD p_rect = (currLine as BPaintLine).BoundingRectD();
 
                     _Svg.Children.Add(new rect
                     {

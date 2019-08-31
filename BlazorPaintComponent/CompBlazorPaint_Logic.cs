@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using BlazorSvgHelper.Classes.SubClasses;
 using Geometry;
@@ -25,7 +26,7 @@ namespace BlazorPaintComponent
         // category=functionality issue=none priority=5 estimate=12h
         // While saving labels the app should send it to server and perhaps give a user an opportunity to download it
 
-        // TODO: Implement selection. It doesn't work at the moment
+        // DONE: Implement selection. It doesn't work at the moment
         // category=functionality issue=none priority=3 estimate=12h
 
         bool IsCompLoadedAtLeastOnce = false;
@@ -840,6 +841,7 @@ namespace BlazorPaintComponent
                 }
             }
 
+            ProcessSelection();
             StateHasChanged();
         }
 
@@ -959,7 +961,7 @@ namespace BlazorPaintComponent
 
         public void onMouseUp(UIMouseEventArgs e)
         {
-            if (CurrOperationalMode == OperationalMode.@select)
+            if (CurrOperationalMode == OperationalMode.select)
             {
                 switch (CurrSelectionMode)
                 {
@@ -971,12 +973,14 @@ namespace BlazorPaintComponent
                             bpSelectionRectangle = null;
                             SelectionVerticesList.RemoveAll(x => true);
                         }
-
-                        cmd_RefreshSVG();
+                        
                         break;
                     default:
                         break;
                 }
+
+                ProcessSelection();
+                cmd_RefreshSVG();
                 StateHasChanged();
             }
             else
@@ -1002,21 +1006,20 @@ namespace BlazorPaintComponent
                             if (currObjectEditing.MandatoryVerticesCount > 2)
                             {
                                 CurrPaintMode = BPaintMode.idle;
-                                cmd_RefreshSVG();
                             }
                             else
                             {
                                 CurrPaintMode = BPaintMode.idle;
-                                cmd_RefreshSVG();
                             }
                         }
                         else
                         {
                             CurrPaintMode = BPaintMode.hoveredAVertex;
                             cmd_Clear_Editing();
-                            cmd_RefreshSVG();
                         }
 
+                        ProcessSelection();
+                        cmd_RefreshSVG();
                         break;
                     case BPaintMode.drawing:
                         switch (FigureCode)
@@ -1040,22 +1043,74 @@ namespace BlazorPaintComponent
 
 
 
-        protected void btnSelectAll_onClick()
+        protected void ProcessSelection()
         {
-            ChangeObjectsSelection(true);
-        }
-
-
-        protected void ChangeObjectsSelection(bool b)
-        {
-            if (ObjectsList.Any())
+            if (bpSelectionRectangle is null)
             {
-                foreach (var item in ObjectsList)
+                cmd_Clear_Selection();
+            }
+
+            RectD SelectionRect = bpSelectionRectangle.BoundingRectD(padding: false);
+            foreach (BPaintObject obj in ObjectsList)
+            {
+                RectD currObjBoundingRect = obj.BoundingRectD(padding:false);
+                if (currObjBoundingRect.IsInRect(SelectionRect))
                 {
-                    item.Selected = b;
+                    obj.Selected = true;
+                }
+                else
+                {
+                    obj.Selected = false;
                 }
             }
         }
+
+
+
+
+        protected void btnSelectAll_onClick()
+        {
+            //ChangeObjectsSelection(true);
+            RectD unionRect = ObjectsList.First().BoundingRectD();
+            foreach (BPaintObject obj in ObjectsList)
+            {
+                unionRect = unionRect.UnionWith(obj.BoundingRectD());
+            }
+
+            bpSelectionRectangle = new BPaintRectangle()
+            {
+                ObjectID = 999
+            };
+
+            BPaintVertex startVertex = new BPaintVertex(new PointD(unionRect.x-10, unionRect.y-10), "magenta");
+            SelectionVerticesList.Add(startVertex);
+
+            bpSelectionRectangle.Selected = false;
+            bpSelectionRectangle.EditMode = true;
+            bpSelectionRectangle.Color = "red";
+            bpSelectionRectangle.LineWidth = 2;
+            bpSelectionRectangle.Position = startVertex;
+            BPaintVertex endVertex = new BPaintVertex(new PointD(unionRect.x + unionRect.width+10, unionRect.y + unionRect.height+10), "magenta");
+            bpSelectionRectangle.end = endVertex;
+            SelectionVerticesList.Add(endVertex);
+            bpSelectionVertexUnderMousePointer = endVertex;
+            
+            ProcessSelection();
+            cmd_RefreshSVG();
+            StateHasChanged();
+        }
+
+
+        //protected void ChangeObjectsSelection(bool b)
+        //{
+        //    if (ObjectsList.Any())
+        //    {
+        //        foreach (var item in ObjectsList)
+        //        {
+        //            item.Selected = b;
+        //        }
+        //    }
+        //}
 
 
         protected void cmd_delete_object()

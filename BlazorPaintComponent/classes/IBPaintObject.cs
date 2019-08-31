@@ -26,5 +26,6 @@ namespace BlazorPaintComponent.classes
         PointD Scale { get; set; }
 
         BPaintOpbjectType ObjectType { get;  }
+
     }
 }
