@@ -1,7 +1,6 @@
 ﻿@inherits CompBlazorPaint_Logic
 @using System
 @using System.Linq
-@*@using System.Net.Http*@
 @using Microsoft.JSInterop
 @implements System.IDisposable
 @inject IJSRuntime JsRuntime
@@ -197,8 +196,8 @@
         <tr>
             <td colspan="2">
                 @*
-        // TODO: Remove btnStartWebAPIsession button; make session to be initialized lazy.
-        // category=Client-server-interface issue=none estimate=6h
+                // TODO: Remove btnStartWebAPIsession button; make session to be initialized lazy.
+                // category=Client-server-interface issue=none estimate=6h
                 *@
                 <button class="btn btn-primary" id="btnStartWebAPIsession" style="cursor: default" @onclick="btnStartWebAPIsession_onClick">Start web API session</button>
                 &nbsp;

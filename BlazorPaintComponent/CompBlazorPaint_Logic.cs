@@ -36,10 +36,8 @@ namespace BlazorPaintComponent
         public BPaintMode CurrPaintMode = BPaintMode.idle;
         public SelectionMode CurrSelectionMode = SelectionMode.idle;
 
-        
-
-        protected double Curr_Scale_X = 1.0;
-        protected double Curr_Scale_Y = 1.0;
+        //protected double Curr_Scale_X = 1.0;
+        //protected double Curr_Scale_Y = 1.0;
 
         protected CompUsedColors_Logic Curr_CompUsedColors = new CompUsedColors_Logic();
         protected CompMySVG Curr_CompMySVG = new CompMySVG();
