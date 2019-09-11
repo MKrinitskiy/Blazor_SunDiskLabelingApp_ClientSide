@@ -9,6 +9,6 @@ namespace Blazor2PythonWebAPI_interfaces
         Rectangle = 0,
         Circle = 1,
         Ellipse = 2,
-        ArbitraryConvexPath = 3,
+        ArbitraryPath = 3,
     }
 }

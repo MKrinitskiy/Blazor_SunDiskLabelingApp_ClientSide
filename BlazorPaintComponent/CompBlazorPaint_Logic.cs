@@ -185,9 +185,15 @@ namespace BlazorPaintComponent
 
 
         #region web API functions
-        protected void btnPrevExample_onClick()
+
+
+        protected async void btnPrevExample_onClick()
         {
-            StateHasChanged();
+            bool webAPIsessionStarted = await EnsureWebAPIsessionStarted();
+            if (webAPIsessionStarted)
+            {
+                RequestPreviousExample();
+            }
         }
 
 
@@ -197,11 +203,15 @@ namespace BlazorPaintComponent
         }
 
 
-        protected async void btnStartWebAPIsession_onClick()
-        {
-            #region starting WebAPI session
 
-            string url = new Uri(base_webAPI_uri).Append("exec?command=start&webapi_client_id="+ guid).AbsoluteUri;
+        protected async Task<bool> EnsureWebAPIsessionStarted()
+        {
+            if (webAPIsessionStarted)
+            {
+                return true;
+            }
+
+            string url = new Uri(base_webAPI_uri).Append("exec?command=start&webapi_client_id=" + guid).AbsoluteUri;
             Console.WriteLine("btnStartWebAPIsession_onClick: HTTP GET");
             Console.WriteLine("URL = " + url);
             HttpClient http = new HttpClient();
@@ -221,7 +231,7 @@ namespace BlazorPaintComponent
             if (resp == null)
             {
                 Console.WriteLine("ERROR: failed deserializing WebAPI response");
-                return;
+                return false;
             }
 
             if (resp.ResponseCode == ResponseCodes.Error)
@@ -229,31 +239,41 @@ namespace BlazorPaintComponent
                 Console.WriteLine("ERROR : failed starting a WebAPI session:");
                 Console.WriteLine("Error code: " + resp.Error.ErrorCode);
                 Console.WriteLine("Error message: " + resp.Error.ErrorDescription);
-                return;
+                return false;
             }
             else if (resp.ResponseCode == ResponseCodes.OK)
             {
                 Console.WriteLine("OK : WebAPI session started successfully!");
                 webAPIsessionStarted = true;
+                return true;
             }
 
-            #endregion
-
-            RequestNextExample();
+            return false;
         }
 
 
-        protected void btnNextExample_onClick()
+
+        //protected async void btnStartWebAPIsession_onClick()
+        //{
+
+        //    RequestNextExample();
+        //}
+
+
+        protected async void btnNextExample_onClick()
         {
-            RequestNextExample();
+            bool webAPIsessionStarted = await EnsureWebAPIsessionStarted();
+            if (webAPIsessionStarted)
+            {
+                RequestNextExample();
+            }
         }
 
         protected async void RequestNextExample()
         {
-            #region request for a first image
+            #region request for a next image
 
             string url = new Uri(base_webAPI_uri).Append("images?command=get_next_image&webapi_client_id=" + guid).AbsoluteUri;
-            Console.WriteLine("btnStartWebAPIsession_onClick: HTTP GET");
             Console.WriteLine("URL = " + url);
             string strRepl = await http.GetStringAsync(url);
 
@@ -294,65 +314,62 @@ namespace BlazorPaintComponent
             
             StateHasChanged();
 
-            //string SunDiskData_str = resp.StringAttributes["SunDisk_RoundDataWithUnderlyingImgSize"];
-            //SunDiskData_str = SunDiskData_str.Replace("\\\"", "\"");
-            //string imgSize_str = resp.StringAttributes["ImgSize_"];
-            //imgSize_str = imgSize_str.Replace("\\\"", "\"");
-
-            //Console.WriteLine("SunDiskData_str:");
-            //Console.WriteLine(SunDiskData_str);
-            //Console.WriteLine("imgSize_str:");
-            //Console.WriteLine(imgSize_str);
-
-            //Console.WriteLine("");
-            //Console.WriteLine("SunDiskData xml:");
-            //RoundDataWithUnderlyingImgSize SunDiskData = JsonConvert.DeserializeObject<RoundDataWithUnderlyingImgSize>(SunDiskData_str, new SizeJsonConverter());
-            //Console.WriteLine(ServiceTools.XmlSerializeToString(SunDiskData));
-
-            //Console.WriteLine("");
-            //Console.WriteLine("imgSize xml:");
-            //Geometry.Size imgSize = JsonConvert.DeserializeObject<Geometry.Size>(imgSize_str);
-            //Console.WriteLine(ServiceTools.XmlSerializeToString(imgSize));
+            #endregion
+        }
 
 
-            //Console.WriteLine("");
-            //Console.WriteLine("");
-            //Geometry.Size testSize = new Geometry.Size(25,125);
-            //Console.WriteLine("testSize JSON:");
-            //string testSize_JSON = JsonConvert.SerializeObject(testSize);
-            //Console.WriteLine(testSize_JSON);
-
-            //Geometry.Size testSize_deserialized = JsonConvert.DeserializeObject<Geometry.Size>(testSize_JSON, new SizeJsonConverter());
-            //Console.WriteLine("");
-            //Console.WriteLine("testSize deserialized ToString:");
-            //Console.WriteLine(testSize_deserialized.ToString());
-
-            //Console.WriteLine("");
-            //Console.WriteLine("testSize deserialized XML:");
-            //Console.WriteLine(ServiceTools.XmlSerializeToString(testSize_deserialized));
 
 
-            //try
-            //{
-            //    RoundDataWithUnderlyingImgSize SunDiskData = JsonConvert.DeserializeObject<RoundDataWithUnderlyingImgSize>(SunDiskData_str);
+        protected async void RequestPreviousExample()
+        {
+            #region request for a next image
 
-            //    Dictionary<Type, List<MethodInfo>> dictAlreadyFoundExtensionsMethods = new Dictionary<Type, List<MethodInfo>>();
-            //    dictAlreadyFoundExtensionsMethods = RoundDataWithUnderlyingImgSize.GetExtensionsMethodsForType(typeof(RoundDataWithUnderlyingImgSize), dictAlreadyFoundExtensionsMethods);
-            //    string SunDiskData_csv = SunDiskData.ToCSV(ref dictAlreadyFoundExtensionsMethods);
+            string url = new Uri(base_webAPI_uri).Append("images?command=get_previous_image&webapi_client_id=" + guid).AbsoluteUri;
+            Console.WriteLine("URL = " + url);
+            string strRepl = await http.GetStringAsync(url);
 
-            //    Console.Write(SunDiskData_csv);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine("ERROR : failed extracting SunDiskData from JSON response.");
-            //    Console.WriteLine(e);
-            //    return;
-            //}
+            WebAPI_response resp = null;
+            try
+            {
+                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            if (resp == null)
+            {
+                Console.WriteLine("ERROR: failed deserializing WebAPI response");
+                return;
+            }
+
+            try
+            {
+                CurrentBackgroundImageURI = resp.StringAttributes["imageURL"];
+                Console.WriteLine("got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI);
+                CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
+                Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : failed extracting CurrentBackgroundImageURI from JSON response.");
+                Console.WriteLine("got JSON response:");
+                Console.Write(strRepl);
+                Console.WriteLine("converted it to the WebAPI_response instance:");
+                Console.Write(resp.ToJSON());
+                Console.WriteLine(e);
+                return;
+            }
+
+            StateHasChanged();
 
             #endregion
-
-            //StateHasChanged();
         }
+
+
+
 
         #endregion
 

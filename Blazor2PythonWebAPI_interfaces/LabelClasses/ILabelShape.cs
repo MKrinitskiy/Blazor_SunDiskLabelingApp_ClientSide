@@ -8,7 +8,7 @@ namespace Blazor2PythonWebAPI_interfaces.LabelClasses
     public interface ILabelShape
     {
         string uid { get; set; }
-        PointD Position { get; set; }
-
+        PointD StartPoint { get; set; }
+        PointD EndPoint { get; set; }
     }
 }
