@@ -1063,6 +1063,7 @@ namespace BlazorPaintComponent
             if (bpSelectionRectangle is null)
             {
                 cmd_Clear_Selection();
+                return;
             }
 
             RectD SelectionRect = bpSelectionRectangle.BoundingRectD(padding: false);
