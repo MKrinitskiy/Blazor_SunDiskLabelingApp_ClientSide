@@ -260,6 +260,8 @@ namespace BlazorPaintComponent
         //}
 
         // TODO: NextExample, PrevExample - labels of the current example persisting. Fix it.
+        // category=functionality issue=none estimate=2h
+        // Probably, those labels should persist, if the user checked some checkbox "copy labels from previous examples"
 
 
         protected async void btnNextExample_onClick()
