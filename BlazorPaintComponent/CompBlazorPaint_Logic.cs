@@ -78,7 +78,7 @@ namespace BlazorPaintComponent
         protected string btnDrawMode_CSSclass = "btn btn-outline-primary btn-with-icons";
         protected bool btnSelectAllDisabled { get; set; }
         protected bool btnDeleteSelectedDisabled { get; set; }
-
+        
 
 
         protected override Task OnInitializedAsync()
@@ -194,6 +194,7 @@ namespace BlazorPaintComponent
             {
                 RequestPreviousExample();
             }
+            ClearAllObjects();
         }
 
 
@@ -259,7 +260,7 @@ namespace BlazorPaintComponent
         //    RequestNextExample();
         //}
 
-        // TODO: NextExample, PrevExample - labels of the current example persisting. Fix it.
+        // DONE: NextExample, PrevExample - labels of the current example persisting. Fix it.
         // category=functionality issue=none estimate=2h
         // Probably, those labels should persist, if the user checked some checkbox "copy labels from previous examples"
 
@@ -271,6 +272,8 @@ namespace BlazorPaintComponent
             {
                 RequestNextExample();
             }
+
+            ClearAllObjects();
         }
 
         protected async void RequestNextExample()
@@ -1176,6 +1179,26 @@ namespace BlazorPaintComponent
                     
                     cmd_RefreshSVG();
                 }
+            }
+        }
+
+
+
+        protected void ClearAllObjects()
+        {
+            if (ObjectsList.Any())
+            {
+                List<BPaintObject> objectsToDelete = ObjectsList;
+                foreach (BPaintObject bpObjectToDelete in objectsToDelete)
+                {
+                    foreach (BPaintVertex vertex in bpObjectToDelete.VerticesList)
+                    {
+                        VerticesList.Remove(vertex);
+                    }
+                    ObjectsList.Remove(bpObjectToDelete);
+                }
+
+                cmd_RefreshSVG();
             }
         }
 
