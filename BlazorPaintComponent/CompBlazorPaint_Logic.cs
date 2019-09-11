@@ -810,6 +810,10 @@ namespace BlazorPaintComponent
             {
                 switch (CurrPaintMode)
                 {
+                    // TODO: Fix vertices highlighting
+                    // category=Appearance issue=none estimate=2h
+                    // when there is no selection rectangle, vertices under the mouse cursor are not highlighted
+
                     case BPaintMode.idle:
                         if (VerticesList.Any(x => (CurrPosition.DistanceTo(x.PtD) <= 10)))
                         {
