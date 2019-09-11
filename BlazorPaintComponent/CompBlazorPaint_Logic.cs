@@ -259,6 +259,8 @@ namespace BlazorPaintComponent
         //    RequestNextExample();
         //}
 
+        // TODO: NextExample, PrevExample - labels of the current example persisting. Fix it.
+
 
         protected async void btnNextExample_onClick()
         {
