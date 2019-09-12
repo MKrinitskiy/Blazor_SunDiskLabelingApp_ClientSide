@@ -219,19 +219,21 @@
                         </g>
                     </svg>
                 </button>
-                @*
-                    // DONE: Change the icon of the btnPrevExample button
-                    // category=Appearance issue=none estimate=1h
-                    // Chenge text to icon
-                *@
-                @*
-                    // DONE: btnPrevExample doesnt work
-                    // category=functionality issue=1 estimate=2h
-                    // Should it work??...
-                *@
-                @*<button class="btn btn-primary" style="cursor: default" @onclick="btnSaveCurrExampleLabels_onClick">Save labels</button>*@
+                <button class="btn btn-primary btn-with-icons"  id="btnSaveLabels" style="cursor: default" title="Save labels" @onclick="btnSaveCurrExampleLabels_onClick">
+                    <svg version="1.1" id="btnSaveLabelsSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="42px" height="42px" viewBox="0 0 49 49" style="enable-background:new 0 0 49 49;" stroke="black" xml:space="preserve">
+                                <g>
+                                    <path d="M39.914,0H37.5h-28h-9v49h7h33h8V8.586L39.914,0z M35.5,2v14h-24V2H35.5z M9.5,47V28h29v19H9.5z M46.5,47h-6V26h-33v21h-5 V2h7v16h28V2h1.586L46.5,9.414V47z"/>
+                                    <path d="M13.5,33h7c0.553,0,1-0.447,1-1s-0.447-1-1-1h-7c-0.553,0-1,0.447-1,1S12.947,33,13.5,33z"/>
+                                    <path d="M23.5,35h-10c-0.553,0-1,0.447-1,1s0.447,1,1,1h10c0.553,0,1-0.447,1-1S24.053,35,23.5,35z"/>
+                                    <path d="M25.79,35.29c-0.181,0.189-0.29,0.45-0.29,0.71s0.109,0.52,0.29,0.71C25.979,36.89,26.229,37,26.5,37 c0.26,0,0.52-0.11,0.71-0.29c0.18-0.19,0.29-0.45,0.29-0.71s-0.11-0.521-0.29-0.71C26.84,34.92,26.16,34.92,25.79,35.29z"/>
+                                    <path d="M33.5,4h-6v10h6V4z M31.5,12h-2V6h2V12z"/>
+                                </g>
+                                
+                            </svg>
+
+                </button>
                 <button class="btn btn-primary btn-with-icons" id="btnNextExample" style="cursor: default" title="Next example" @onclick="btnNextExample_onClick">
-                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" x="0px" y="0px" viewBox="0 0 219.15 219.15" style="enable-background:new 0 0 219.15 219.15;" fill="black" stroke="black" xml:space="preserve">
+                    <svg version="1.1" id="btnNextExampleSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" x="0px" y="0px" viewBox="0 0 219.15 219.15" style="enable-background:new 0 0 219.15 219.15;" fill="black" stroke="black" xml:space="preserve">
                     <g>
                     <path d="M109.575,0C49.156,0,0.002,49.155,0.002,109.576c0,60.419,49.154,109.574,109.573,109.574s109.573-49.155,109.573-109.574
                                     C219.148,49.155,169.994,0,109.575,0z M109.575,204.15c-52.148,0-94.573-42.426-94.573-94.574C15.002,57.427,57.427,15,109.575,15

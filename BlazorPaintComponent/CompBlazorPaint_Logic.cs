@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Threading;
 using System.Threading.Tasks;
 using BlazorSvgHelper.Classes.SubClasses;
 using Geometry;
@@ -198,13 +200,7 @@ namespace BlazorPaintComponent
         }
 
 
-        protected void btnSaveCurrExampleLabels_onClick()
-        {
-            StateHasChanged();
-        }
-
-
-
+        
         protected async Task<bool> EnsureWebAPIsessionStarted()
         {
             if (webAPIsessionStarted)
@@ -254,15 +250,32 @@ namespace BlazorPaintComponent
 
 
 
-        //protected async void btnStartWebAPIsession_onClick()
-        //{
 
-        //    RequestNextExample();
-        //}
+        protected async void btnSaveCurrExampleLabels_onClick()
+        {
+            bool webAPIsessionStarted = await EnsureWebAPIsessionStarted();
+            if (!webAPIsessionStarted)
+            {
+                return;
+            }
 
-        // DONE: NextExample, PrevExample - labels of the current example persisting. Fix it.
-        // category=functionality issue=none estimate=2h
-        // Probably, those labels should persist, if the user checked some checkbox "copy labels from previous examples"
+            // TODO: implement labels data transfer to server-side
+            // category=Client-server-interface issue=none estimate=6h
+
+
+            string url = new Uri(base_webAPI_uri).Append("images?command=get_next_image&webapi_client_id=" + guid).AbsoluteUri;
+            Console.WriteLine("URL = " + url);
+            HttpResponseMessage response = await http.PostAsync(url, new StringContent(""), CancellationToken.None);
+            HttpStatusCode respCode = response.StatusCode;
+            Console.WriteLine("response status code: " + respCode);
+            if (respCode != HttpStatusCode.OK)
+            {
+                
+            }
+
+            StateHasChanged();
+        }
+
 
 
         protected async void btnNextExample_onClick()
