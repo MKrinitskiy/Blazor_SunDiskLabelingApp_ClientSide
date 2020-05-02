@@ -1375,7 +1375,6 @@ namespace BlazorPaintComponent
 
         public void GetBoundingClientRect(string ElementID)
         {
-            //Console.WriteLine("hit GetBoundingClientRect()");
             BPaintJsInterop.GetElementBoundingClientRect(ElementID, DotNetObjectReference.Create(this));
         }
 
@@ -1387,10 +1386,6 @@ namespace BlazorPaintComponent
         [JSInvokable]
         public void invokeFromjs(string id, double rect_left, double rect_top, double rect_width, double rect_height, double window_scrollX, double window_scrollY)
         {
-            //Console.WriteLine("hit invokeFromjs()");
-            //Console.WriteLine("id = " + id + "; left = " + rect_left + "; top = " + rect_top + "; width = " + rect_width + "; height = " + rect_height + "; w_scrollX = " + window_scrollX + "; w_scrollY = " + window_scrollY);
-
-            //LocalData.SVGPosition = new PointD(rect_left + window_scrollX, rect_top + window_scrollY);
             LocalData.SVGPosition = new PointD(rect_left, rect_top);
         }
     }
