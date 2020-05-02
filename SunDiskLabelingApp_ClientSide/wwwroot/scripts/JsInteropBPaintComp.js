@@ -8,6 +8,7 @@ window.JsInteropBPaintComp = {
 
     GetElementBoundingClientRect: function (obj)
     {
+        //console.log("hit JsInteropBPaintComp.GetElementBoundingClientRect")
         // its a JS helper which returns the rect 
 
         if (document.getElementById(obj["id"]) !== null)
@@ -46,13 +47,17 @@ window.JsInteropBPaintComp = {
         //    return false;
         //}
 
-        if (document.getElementById(obj["id"]) !== null) {
+        //console.log("hit JsInteropBPaintComp.UpdateSVGPosition")
+
+        if (document.getElementById(obj["id"]) !== null)
+        {
             let rect = document.getElementById(obj["id"]).getBoundingClientRect();
 
             obj["dotnethelper"].invokeMethodAsync('invokeFromjs', obj["id"], rect.left, rect.top, rect.width, rect.height, window.scrollX, window.scrollY);
             return true;
         }
-        else {
+        else
+        {
             return false;
         }
 

@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace BlazorPaintComponent
 {
@@ -13,25 +15,25 @@ namespace BlazorPaintComponent
     {
 
         [Parameter]
-        protected ComponentBase parent { get; set; }
+        public ComponentBase Parent { get; set; }
 
         [Parameter]
-        protected string color { get; set; }
+        public string Color { get; set; }
 
-        public Action<UIMouseEventArgs> ActionClicked;
+        public Action<MouseEventArgs> ActionClicked;
 
 
         private SvgHelper SvgHelper1 = new SvgHelper();
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            int par_id = (parent as CompUsedColors).UsedColors_List.IndexOf(color);
+            int par_id = (Parent as CompUsedColors).UsedColors_List.IndexOf(Color);
             circle c = new circle()
             {
                 cx = (9 - par_id) * 30 + 15,
                 cy = 15,
                 r = 10,
-                fill = color,
+                fill = Color,
                 stroke = "black",
                 stroke_width = 1,
                 onclick = "notEmpty",
@@ -45,24 +47,24 @@ namespace BlazorPaintComponent
         }
 
 
-        protected override void OnAfterRender()
+        protected override void OnAfterRender(bool firstRender)
         {
 
             SvgHelper1.ActionClicked = ComponentClicked;
             this.ActionClicked = ComponentClicked;
 
-            (parent as CompUsedColors).Curr_CompChildUsedColor_List.Add(this);
+            (Parent as CompUsedColors).Curr_CompChildUsedColor_List.Add(this);
 
         }
 
 
 
-        public void ComponentClicked(UIMouseEventArgs e)
+        public void ComponentClicked(MouseEventArgs e)
         {
             Console.WriteLine("hit CompChildUsedColor.ComponentClicked()" + Environment.NewLine +
-                              "Color is: " + color + Environment.NewLine + 
-                              "parent: " + parent.ToString());
-            (parent as CompUsedColors).ColorSelected(color);
+                              "Color is: " + Color + Environment.NewLine + 
+                              "parent: " + Parent.ToString());
+            (Parent as CompUsedColors).ColorSelected(Color);
         }
 
 

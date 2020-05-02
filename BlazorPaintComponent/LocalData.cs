@@ -28,7 +28,8 @@ namespace BlazorPaintComponent
                               rect_width + "; height = " + rect_height + "; w_scrollX = " + window_scrollX +
                               "; w_scrollY = " + window_scrollY);
 
-            SVGPosition = new PointD(rect_left + window_scrollX, rect_top + window_scrollY);
+            //SVGPosition = new PointD(rect_left + window_scrollX, rect_top + window_scrollY);
+            SVGPosition = new PointD(rect_left, rect_top);
         }
 
 

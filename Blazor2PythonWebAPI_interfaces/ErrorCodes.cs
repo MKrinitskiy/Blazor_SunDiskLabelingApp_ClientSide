@@ -12,5 +12,6 @@ namespace Blazor2PythonWebAPI_interfaces
         UnknownError = 2,
         FileNotFoundError = 3,
         ClientIDnotFound = 4,
+        NotImplementedError = 5,
     }
 }

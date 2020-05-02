@@ -10,19 +10,20 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Geometry;
+using Microsoft.AspNetCore.Components.Rendering;
 
 namespace BlazorPaintComponent
 {
     public class CompMySVG : ComponentBase, IDisposable
     {
 
-        [Parameter] protected ComponentBase parent { get; set; }
+        [Parameter] public ComponentBase Parent { get; set; }
 
         [Parameter]
-        protected double par_width { get; set; }
+        public double par_width { get; set; }
 
         [Parameter]
-        protected double par_height { get; set; }
+        public double par_height { get; set; }
 
 
         svg _Svg = null;
@@ -60,7 +61,7 @@ namespace BlazorPaintComponent
                 stroke_width = 1,
             });
 
-            CompBlazorPaint currParent = (parent as CompBlazorPaint);
+            CompBlazorPaint currParent = (Parent as CompBlazorPaint);
 
 
 

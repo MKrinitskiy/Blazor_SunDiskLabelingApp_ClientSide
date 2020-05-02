@@ -16,12 +16,14 @@ window.addEventListener("resize", onResize, false);
 
 function onScroll() {
     //if (OnOrOff === true) {
-        DotNet.invokeMethodAsync('BlazorWindowHelper', 'InvokeOnScroll');
+    console.log('BWHJsInterop: hit onScroll');
+    DotNet.invokeMethodAsync('BlazorWindowHelper', 'InvokeOnScroll');
     //}
 }
 
 function onResize() {
     if (OnOrOff === true) {
+        console.log('BWHJsInterop: hit onResize');
         DotNet.invokeMethodAsync('BlazorWindowHelper', 'InvokeOnResize');
     }
 }

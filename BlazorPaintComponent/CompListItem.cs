@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Rendering;
 
 namespace BlazorPaintComponent
 {
@@ -12,17 +13,17 @@ namespace BlazorPaintComponent
     {
 
         [Parameter]
-        protected int Par_ID { get; set; } = 0;
+        public int Par_ID { get; set; } = 0;
 
 
         [Parameter]
-        protected ComponentBase parent { get; set; }
+        public ComponentBase Parent { get; set; }
 
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
 
-            BPaintObject  curr_object = (parent as CompBlazorPaint).ObjectsList.Single(x=>x.ObjectID==Par_ID);
+            BPaintObject  curr_object = (Parent as CompBlazorPaint).ObjectsList.Single(x=>x.ObjectID==Par_ID);
 
             int k = -1;
 
@@ -58,7 +59,7 @@ namespace BlazorPaintComponent
 
         private void Cmd_Item_Select(int Par_ID)
         {
-            CompBlazorPaint p = parent as CompBlazorPaint;
+            CompBlazorPaint p = Parent as CompBlazorPaint;
 
 
             //if (!p.MultiSelect)

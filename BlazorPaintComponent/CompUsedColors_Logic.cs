@@ -13,7 +13,7 @@ namespace BlazorPaintComponent
     public class CompUsedColors_Logic : ComponentBase, IDisposable
     {
         [Parameter]
-        protected ComponentBase parent { get; set; }
+        public ComponentBase Parent { get; set; }
 
         public List<string> UsedColors_List = new List<string>(){ "#008000", "#FFFFFF","#FF0000", "#0000FF", "#FFFF00", "#808080", "#C0C0C0","#A52A2A", "#FFD700", "#000000"};
         

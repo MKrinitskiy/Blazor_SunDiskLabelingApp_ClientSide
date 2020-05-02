@@ -15,13 +15,13 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SunDiskLabelingApp_ClientSide.Client": {
+    "SunDiskLabelingApp_ClientSide": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:50929/"
+      "applicationUrl": "http://localhost:5000"
     }
   }
 }

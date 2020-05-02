@@ -20,7 +20,7 @@ namespace BlazorPaintComponent
         }
 
         
-        public static Task<string> alert(string message)
+        public static ValueTask<string> alert(string message)
         {
 
             return jsRuntime.InvokeAsync<string>(
@@ -30,7 +30,7 @@ namespace BlazorPaintComponent
 
 
         
-        public static Task<string> log(string message)
+        public static ValueTask<string> log(string message)
         {
 
             return jsRuntime.InvokeAsync<string>(
@@ -39,7 +39,7 @@ namespace BlazorPaintComponent
         }
 
         
-        public static Task<bool> GetElementBoundingClientRect(string id, object dotnethelper)
+        public static ValueTask<bool> GetElementBoundingClientRect(string id, object dotnethelper)
         {
             return jsRuntime.InvokeAsync<bool>(
                     "JsInteropBPaintComp.GetElementBoundingClientRect",
@@ -48,15 +48,15 @@ namespace BlazorPaintComponent
         }
 
         
-        public static Task<bool> UpdateSVGPosition(string id, object dotnethelper)
+        public static ValueTask<bool> UpdateSVGPosition(string id, object dotnethelper)
         {
-
+            //Console.WriteLine("hit UpdateSVGPosition");
             return jsRuntime.InvokeAsync<bool>(
                 "JsInteropBPaintComp.UpdateSVGPosition", new { id, dotnethelper });
         }
 
 
-        public static Task<bool> SetCursor(string cursorStyle = "default")
+        public static ValueTask<bool> SetCursor(string cursorStyle = "default")
         {
 
             return jsRuntime.InvokeAsync<bool>(

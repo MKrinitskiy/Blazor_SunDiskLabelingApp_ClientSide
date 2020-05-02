@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace BlazorSvgHelper
 {
     public class SvgHelper
     {
 
-        public Action<UIMouseEventArgs> ActionClicked;
+        public Action<MouseEventArgs> ActionClicked;
 
         public Action<int> ActionSelected;
         public Dictionary<string, ElementReference> Elementreferences_Dictionary = new Dictionary<string, ElementReference>();
@@ -32,7 +34,7 @@ namespace BlazorSvgHelper
         public void Cmd_Render<T>(T _Item, int k, RenderTreeBuilder builder, int Par_ID = 0)
         {
 
-            Action<UIMouseEventArgs> act1 = new Action<UIMouseEventArgs>((s) =>
+            Action<MouseEventArgs> act1 = new Action<MouseEventArgs>((s) =>
             {
                 Cmd_Clicked(s);
             });
@@ -171,7 +173,7 @@ namespace BlazorSvgHelper
 
 
 
-        public void Cmd_Clicked(UIMouseEventArgs e)
+        public void Cmd_Clicked(MouseEventArgs e)
         {
             ActionClicked?.Invoke(e);
         }
