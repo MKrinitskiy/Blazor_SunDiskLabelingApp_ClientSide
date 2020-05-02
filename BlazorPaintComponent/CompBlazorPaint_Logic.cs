@@ -1379,7 +1379,7 @@ namespace BlazorPaintComponent
         }
 
 
-        // TODO: fix wrong positioning of the SVG items drawn by mouse
+        // DONE: fix wrong positioning of the SVG items drawn by mouse
         // color=Red
         // category=GUI issue=none estimate=12h
 
