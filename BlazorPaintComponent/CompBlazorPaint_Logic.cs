@@ -1355,9 +1355,6 @@ namespace BlazorPaintComponent
 
 
 
-
-
-
         protected void cmd_Move(BPaintMoveDirection Par_Direction)
         {
             if (ObjectsList.Any())
