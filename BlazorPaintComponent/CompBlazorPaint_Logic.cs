@@ -31,9 +31,6 @@ namespace BlazorPaintComponent
         // category=functionality issue=none priority=5 estimate=12h
         // While saving labels the app should send it to server and perhaps give a user an opportunity to download it
 
-        // DONE: Implement selection. It doesn't work at the moment
-        // category=functionality issue=none priority=3 estimate=12h
-
         bool IsCompLoadedAtLeastOnce = false;
 
 
@@ -495,148 +492,7 @@ namespace BlazorPaintComponent
             StateHasChanged();
         }
 
-
-        #region // cmd_Size_Changed
-        //protected void cmd_Size_Changed(UIChangeEventArgs e)
-        //{
-        //    if (e?.Value != null)
-        //    {
-        //        LineWidth1 = int.Parse(e.Value as string);
-
-        //        //if (Curr_Mode == BPaintMode.editing)
-        //        //{
-        //        if (ObjectsList.Any())
-        //        {
-        //            foreach (var item in ObjectsList.Where(x => x.Selected))
-        //            {
-        //                item.LineWidth = LineWidth1;
-        //            }
-        //        }
-        //        //}
-        //        cmd_RefreshSVG();
-        //    }
-        //}
-        #endregion
-
-
-        #region // clear & undo
-        //public void cmd_clear()
-        //{
-        //    if (ObjectsList.Any())
-        //    {
-        //        ObjectsList = new List<BPaintObject>();
-        //    }
-
-        //    if (VerticesList.Any())
-        //    {
-        //        VerticesList = new List<BPaintVertex>();
-        //    }
-
-        //    cmd_RefreshSVG();
-        //}
-
-
-        //public void cmd_undo()
-        //{
-        //    if (ObjectsList.Any())
-        //    {
-        //        ObjectsList.Remove(ObjectsList.Last());
-        //        cmd_RefreshSVG();
-        //    }
-        //}
-        #endregion
-
-
-        #region // scaling
-        //protected void cmd_scale_x(UIChangeEventArgs e)
-        //{
-        //    if (e?.Value != null)
-        //    {
-        //        Curr_Scale_X = double.Parse(e.Value as string);
-
-
-
-
-        //        if (ObjectsList.Any())
-        //        {
-
-        //            foreach (var item in ObjectsList.Where(x => x.Selected))
-        //            {
-        //                item.Scale = new PointD(Curr_Scale_X, Curr_Scale_Y);
-        //            }
-
-
-
-        //            cmd_RefreshSVG();
-
-
-        //        }
-        //    }
-        //}
-
-
-        //protected void cmd_scale_y(UIChangeEventArgs e)
-        //{
-        //    if (e?.Value != null)
-        //    {
-        //        Curr_Scale_Y = double.Parse(e.Value as string);
-
-        //        if (ObjectsList.Any())
-        //        {
-        //            foreach (var item in ObjectsList.Where(x => x.Selected))
-        //            {
-        //                item.Scale = new PointD(Curr_Scale_X, Curr_Scale_Y);
-        //            }
-        //            cmd_RefreshSVG();
-        //        }
-        //    }
-        //}
-        #endregion // scaling
-
-
-        //protected void cmd_rotate(UIChangeEventArgs e)
-        //{
-        //    bool anythingChanged = false;
-        //    if (e?.Value != null)
-        //    {
-        //        Curr_Rotate_rad = double.Parse(e.Value as string);
-        //
-        //        if (ObjectsList.Any())
-        //        {
-        //            foreach (BPaintObject paintObject in ObjectsList.Where(x => x.ObjectType == BPaintOpbjectType.Line))
-        //            {
-        //                BPaintLine currLine = paintObject as BPaintLine;
-        //                SVGtransform currLineTransform = new SVGtransform(
-        //                    rotateCx: currLine.VerticesList.Average(vertex => vertex.Position.X),
-        //                    rotateCy: currLine.VerticesList.Average(vertex => vertex.Position.Y),
-        //                    rotateAngleDegrees: Curr_Rotate_deg);
-        //                currLine.transform = currLineTransform;
-        //                foreach (BPaintVertex vertex in currLine.VerticesList)
-        //                {
-        //                    vertex.transform = currLineTransform;
-        //                }
-        //            }
-        //            anythingChanged = anythingChanged | true;
-        //        }
-
-        //        //if (VerticesList.Any())
-        //        //{
-        //        //    foreach (BPaintVertex vertex in VerticesList)
-        //        //    {
-        //        //        vertex.transform = new SVGtransform(rotateAngleDegrees: Curr_Rotate_deg, rotateCx: vertex.Position.X, rotateCy:vertex.Position.Y);
-        //        //    }
-        //        //    anythingChanged = anythingChanged | true;
-        //        //}
-        //    }
-        //
-        //    if (anythingChanged)
-        //    {
-        //        cmd_RefreshSVG();
-        //    }
-        //}
-
-
-
+                
 
         public void cmd_Clear_Selection()
         {
@@ -650,6 +506,8 @@ namespace BlazorPaintComponent
                 vertex.Selected = false;
             }
         }
+
+
 
         public void cmd_Clear_Editing()
         {
