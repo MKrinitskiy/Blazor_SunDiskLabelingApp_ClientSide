@@ -1394,6 +1394,9 @@ namespace BlazorPaintComponent
         }
 
 
+        // TODO: implement labels data transfer to server-side
+        // color=Red
+        // category=GUI issue=none estimate=12h
 
         [JSInvokable]
         public void invokeFromjs(string id, double rect_left, double rect_top, double rect_width, double rect_height, double window_scrollX, double window_scrollY)
