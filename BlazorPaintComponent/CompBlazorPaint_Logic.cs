@@ -1224,17 +1224,6 @@ namespace BlazorPaintComponent
         }
 
 
-        //protected void ChangeObjectsSelection(bool b)
-        //{
-        //    if (ObjectsList.Any())
-        //    {
-        //        foreach (var item in ObjectsList)
-        //        {
-        //            item.Selected = b;
-        //        }
-        //    }
-        //}
-
 
         protected void cmd_delete_object()
         {
