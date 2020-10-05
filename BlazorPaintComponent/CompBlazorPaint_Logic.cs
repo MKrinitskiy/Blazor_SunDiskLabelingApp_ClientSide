@@ -3,25 +3,21 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
-using BlazorSvgHelper.Classes.SubClasses;
 using Geometry;
 using Blazor2PythonWebAPI_interfaces;
-using CommonInterfaces;
 using Newtonsoft.Json;
-using CommonLibs;
 using Microsoft.AspNetCore.Components.Web;
-
-
+//using System.Xml;
+//using System.Xml.Serialization;
+//using System.Text.Json;
+//using System.Text.Json.Serialization;
+using System.IO;
+//using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace BlazorPaintComponent
 {
@@ -65,8 +61,11 @@ namespace BlazorPaintComponent
         protected string strCurrSVGareaLocation =>
             string.Format("x: {0}; y: {1}", LocalData.SVGPosition.X, LocalData.SVGPosition.Y);
 
+        protected SizeD PaintAreaSize = new SizeD();
+
 
         protected string CurrentBackgroundImageURI = "";
+        protected string CurrentImageBasename = "";
         private string guid = (Guid.NewGuid()).ToString().Replace("-", "");
         private readonly HttpClient http = new HttpClient();
         private string base_webAPI_uri = "http://127.0.0.1:2019/";
@@ -263,18 +262,31 @@ namespace BlazorPaintComponent
                 return;
             }
 
-            // TODO: implement labels data transfer to server-side
-            // category=Client-server-interface issue=none estimate=6h
-
-
+            
             string url = new Uri(base_webAPI_uri).Append("labels?command=post_current_example_labels&webapi_client_id=" + guid).AbsoluteUri;
             Console.WriteLine("URL = " + url);
-            //logText += "URL = " + url + Environment.NewLine;
-            //logText += url + Environment.NewLine;
-            HttpResponseMessage response = await http.PostAsync(url, new StringContent(""), CancellationToken.None);
+
+            ExampleLabels labelsPackage = new ExampleLabels(CurrentImageBasename, ObjectsList, PaintAreaSize);
+            //XmlSerializer serializer = new XmlSerializer(typeof(ExampleLabels));
+
+            //XmlSerializer serializer = new XmlSerializer(typeof(List<BPaintObject>));
+            //TextWriter writer = new StringWriter();
+            //serializer.Serialize(writer, ObjectsList);
+            //serializer.Serialize(writer, labelsPackage);
+            //writer.Close();
+
+            string currExampleLabelsJSONstring = JsonConvert.SerializeObject(labelsPackage, Formatting.Indented);
+
+
+            //string currExampleLabelsJSON = JsonConvert.SerializeObject(ObjectsList);
+            //Console.WriteLine("currExampleLabelsJSON: ");
+            //Console.WriteLine(currExampleLabelsJSON);
+            //string currExampleLabelsXMLstring = writer.ToString();
+            Console.WriteLine("currExampleLabelsJSONstring: ");
+            Console.WriteLine(currExampleLabelsJSONstring);
+            HttpResponseMessage response = await http.PostAsync(url, new StringContent(currExampleLabelsJSONstring), CancellationToken.None);
             HttpStatusCode respCode = response.StatusCode;
             Console.WriteLine("response status code: " + respCode);
-            //logText += "response status code: " + respCode + Environment.NewLine;
             if (respCode != HttpStatusCode.OK)
             {
                 
@@ -341,6 +353,8 @@ namespace BlazorPaintComponent
                     Console.WriteLine("got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI);
                     CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
                     Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
+
+                    CurrentImageBasename = resp.StringAttributes["imgBaseName"];
                 }
                 catch (Exception e)
                 {
@@ -387,9 +401,10 @@ namespace BlazorPaintComponent
                     {
                         CurrentBackgroundImageURI = resp.StringAttributes["imageURL"];
                         Console.WriteLine("got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI);
-                        CurrentBackgroundImageURI =
-                            new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
+                        CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
                         Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
+
+                        CurrentImageBasename = resp.StringAttributes["imgBaseName"];
                     }
                     catch (Exception e)
                     {
@@ -449,6 +464,8 @@ namespace BlazorPaintComponent
                 CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
                 Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
                 //logText += "now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI + Environment.NewLine;
+
+                CurrentImageBasename = resp.StringAttributes["imgBaseName"];
             }
             catch (Exception e)
             {
@@ -1237,14 +1254,20 @@ namespace BlazorPaintComponent
         }
 
 
-        // DONE: fix wrong positioning of the SVG items drawn by mouse
-        // color=Red
-        // category=GUI issue=none estimate=12h
-
+        
         [JSInvokable]
         public void invokeFromjs(string id, double rect_left, double rect_top, double rect_width, double rect_height, double window_scrollX, double window_scrollY)
         {
             LocalData.SVGPosition = new PointD(rect_left, rect_top);
+            //Console.WriteLine("invokeFromjs: id = " + id);
+            //Console.WriteLine("rect_left = " + rect_left.ToString());
+            //Console.WriteLine("rect_top = " + rect_top.ToString());
+            //Console.WriteLine("rect_width = " + rect_width.ToString());
+            //Console.WriteLine("rect_height = " + rect_height.ToString());
+            //Console.WriteLine("window_scrollX = " + window_scrollX.ToString());
+            //Console.WriteLine("window_scrollY = " + window_scrollY.ToString());
+            PaintAreaSize.Width = rect_width;
+            PaintAreaSize.Height= rect_height;
         }
     }
 }

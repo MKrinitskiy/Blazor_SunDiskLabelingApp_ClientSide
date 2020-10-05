@@ -4,9 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
+//using System.Xml.Serialization;
 using CommonInterfaces;
 //using Emgu.CV.Structure;
+//using System.Text.Json;
+//using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
 
 namespace Geometry
 {
@@ -22,7 +26,8 @@ namespace Geometry
 
         private int intCenterX;
 
-        [XmlElement("intCenterX")]
+        
+        [JsonProperty("intCenterX")]
         public int IntCenterX
         {
             get { return intCenterX; }
@@ -35,7 +40,7 @@ namespace Geometry
 
         private int intCenterY;
 
-        [XmlElement("intCenterY")]
+        [JsonProperty("intCenterY")]
         public int IntCenterY
         {
             get { return intCenterY; }
@@ -48,7 +53,7 @@ namespace Geometry
 
         private double dCenterX;
 
-        [XmlElement("doubleCenterX")]
+        [JsonProperty("doubleCenterX")]
         public double DCenterX
         {
             get { return dCenterX; }
@@ -61,7 +66,8 @@ namespace Geometry
 
         private double dCenterY;
 
-        [XmlElement("doubleCenterY")]
+        
+        [JsonProperty("doubleCenterY")]
         public double DCenterY
         {
             get { return dCenterY; }
@@ -74,7 +80,8 @@ namespace Geometry
 
         private double dRadius;
 
-        [XmlElement("doubleRadius")]
+
+        [JsonProperty("doubleRadius")]
         public double DRadius
         {
             get { return dRadius; }

@@ -5,9 +5,16 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace BlazorSvgHelper.Classes.SubClasses
 {
+    [Serializable]
     public class SVGtransform
     {
-        public DenseMatrix TransformMatrix { get; set; }
+        private DenseMatrix TransformMatrix { get; set; }
+
+        public SVGtransform(): this(translateX: 0.0, translateY: 0.0, scaleX: 1.0, scaleY: 1.0, rotateCx: 0.0, rotateCy: 0.0, rotateAngleDegrees: 0.0)
+        {
+
+        }
+        
 
         public SVGtransform(double translateX = 0.0, double translateY = 0.0, double scaleX = 1.0, double scaleY = 1.0, double rotateCx = 0.0, double rotateCy = 0.0, double rotateAngleDegrees = 0.0)
         {

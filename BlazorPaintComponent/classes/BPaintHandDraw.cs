@@ -9,7 +9,7 @@ namespace BlazorPaintComponent.classes
     [Serializable]
     public class BPaintHandDraw: BPaintObject
     {
-        public PointD Position { get; set; }
+        //public PointD Position { get; set; }
         public List<PointD> data;
         
         public bool IsValid()

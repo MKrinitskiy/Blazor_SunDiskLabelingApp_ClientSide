@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using BlazorSvgHelper.Classes.SubClasses;
 using Geometry;
+using Newtonsoft.Json;
+
 
 namespace BlazorPaintComponent.classes
 {
@@ -10,12 +12,14 @@ namespace BlazorPaintComponent.classes
     public class BPaintVertex
     {
         //public int ObjectID { get; set; }
-        public bool Selected { get; set; }
+        [JsonIgnore]
+        public bool Selected;
         //public bool EditMode { get; set; }
         //public int SequenceNumber { get; set; }
 
 
-        public string Color { get; set; }
+        [JsonIgnore]
+        public string Color;
         //public double width { get; set; }
 
         public PointD PtD { get; set; }
@@ -24,14 +28,16 @@ namespace BlazorPaintComponent.classes
         //public BPaintOpbjectType ObjectType { get; set; }
 
 
+        [JsonIgnore]
         public SVGtransform transform { get; set; } = new SVGtransform();
 
-
+        [JsonIgnore]
         public double x
         {
             get { return PtD.X; }
         }
 
+        [JsonIgnore]
         public double y
         {
             get { return PtD.Y; }

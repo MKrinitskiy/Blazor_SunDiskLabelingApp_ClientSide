@@ -207,13 +207,13 @@
         <tr>
             <td colspan="2">
                 @*
-                    // DONE: Remove btnStartWebAPIsession button; make session to be initialized lazy.
-                    // category=Client-server-interface issue=none estimate=6h
+        // DONE: Remove btnStartWebAPIsession button; make session to be initialized lazy.
+        // category=Client-server-interface issue=none estimate=6h
                 *@
 
                 <!--
-                <button class="btn btn-primary" id="btnStartWebAPIsession" style="cursor: default" @onclick="btnStartWebAPIsession_onClick">Start web API session</button>
-                    -->
+    <button class="btn btn-primary" id="btnStartWebAPIsession" style="cursor: default" @onclick="btnStartWebAPIsession_onClick">Start web API session</button>
+        -->
                 &nbsp;
                 <button class="btn btn-primary btn-with-icons" id="btnPrevExample" style="cursor: default" title="Previous example" @onclick="btnPrevExample_onClick">
                     <svg version="1.1" id="btnPrevExampleSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="42px" height="42px" x="0px" y="0px" viewBox="0 0 219.151 219.151" fill="black" stroke="black" style="enable-background:new 0 0 219.151 219.151;" xml:space="preserve">
@@ -221,10 +221,16 @@
                     <path d="M109.576,219.151c60.419,0,109.573-49.156,109.573-109.576C219.149,49.156,169.995,0,109.576,0S0.002,49.156,0.002,109.575
                                   C0.002,169.995,49.157,219.151,109.576,219.151z M109.576,15c52.148,0,94.573,42.426,94.574,94.575
                                   c0,52.149-42.425,94.575-94.574,94.576c-52.148-0.001-94.573-42.427-94.573-94.577C15.003,57.427,57.428,15,109.576,15z" />
+
+
+
                     <path d="M94.861,156.507c2.929,2.928,7.678,2.927,10.606,0c2.93-2.93,2.93-7.678-0.001-10.608l-28.82-28.819l83.457-0.008
                                   c4.142-0.001,7.499-3.358,7.499-7.502c-0.001-4.142-3.358-7.498-7.5-7.498l-83.46,0.008l28.827-28.825
                                   c2.929-2.929,2.929-7.679,0-10.607c-1.465-1.464-3.384-2.197-5.304-2.197c-1.919,0-3.838,0.733-5.303,2.196l-41.629,41.628
                                   c-1.407,1.406-2.197,3.313-2.197,5.303c0.001,1.99,0.791,3.896,2.198,5.305L94.861,156.507z" />
+
+
+
                         </g>
                     </svg>
                 </button>
@@ -232,10 +238,25 @@
                     <svg version="1.1" id="btnSaveLabelsSVGicon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="42px" height="42px" viewBox="0 0 49 49" style="enable-background:new 0 0 49 49;" stroke="black" xml:space="preserve">
                     <g>
                     <path d="M39.914,0H37.5h-28h-9v49h7h33h8V8.586L39.914,0z M35.5,2v14h-24V2H35.5z M9.5,47V28h29v19H9.5z M46.5,47h-6V26h-33v21h-5 V2h7v16h28V2h1.586L46.5,9.414V47z" />
+
+
+
                     <path d="M13.5,33h7c0.553,0,1-0.447,1-1s-0.447-1-1-1h-7c-0.553,0-1,0.447-1,1S12.947,33,13.5,33z" />
+
+
+
                     <path d="M23.5,35h-10c-0.553,0-1,0.447-1,1s0.447,1,1,1h10c0.553,0,1-0.447,1-1S24.053,35,23.5,35z" />
+
+
+
                     <path d="M25.79,35.29c-0.181,0.189-0.29,0.45-0.29,0.71s0.109,0.52,0.29,0.71C25.979,36.89,26.229,37,26.5,37 c0.26,0,0.52-0.11,0.71-0.29c0.18-0.19,0.29-0.45,0.29-0.71s-0.11-0.521-0.29-0.71C26.84,34.92,26.16,34.92,25.79,35.29z" />
+
+
+
                     <path d="M33.5,4h-6v10h6V4z M31.5,12h-2V6h2V12z" />
+
+
+
                     </g></svg>
 
                 </button>
@@ -245,20 +266,27 @@
                     <path d="M109.575,0C49.156,0,0.002,49.155,0.002,109.576c0,60.419,49.154,109.574,109.573,109.574s109.573-49.155,109.573-109.574
                                     C219.148,49.155,169.994,0,109.575,0z M109.575,204.15c-52.148,0-94.573-42.426-94.573-94.574C15.002,57.427,57.427,15,109.575,15
                                     s94.573,42.427,94.573,94.576C204.148,161.725,161.723,204.15,109.575,204.15z" />
+
+
+
                     <path d="M124.29,62.645c-2.929-2.928-7.678-2.928-10.606,0c-2.929,2.93-2.929,7.678,0,10.607l28.821,28.82l-83.457,0.008
                                     c-4.143,0-7.5,3.358-7.5,7.501c0,4.142,3.358,7.499,7.5,7.499l83.46-0.008l-28.827,28.825c-2.929,2.929-2.929,7.678,0,10.606
                                     c1.464,1.465,3.384,2.197,5.303,2.197c1.919,0,3.839-0.732,5.303-2.196l41.629-41.627c1.407-1.407,2.197-3.314,2.197-5.304
                                     c0-1.989-0.79-3.897-2.197-5.304L124.29,62.645z" />
+
+
+
                         </g>
                     </svg>
                 </button>
                 @*
-                    // DONE: Change the icon of the btnNextExample button
-                    // category=Appearance issue=none estimate=1h
-                    // Chenge text to icon
+        // DONE: Change the icon of the btnNextExample button
+        // category=Appearance issue=none estimate=1h
+        // Chenge text to icon
                 *@
                 <br />
-                <label>web API session started: @webAPIsessionStarted</label>
+                @*<label>web API session started: @webAPIsessionStarted</label>*@
+                <label>current image name: @CurrentImageBasename</label>
             </td>
             <td>&nbsp;</td>
         </tr>

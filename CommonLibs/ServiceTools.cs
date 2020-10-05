@@ -8,8 +8,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Xml;
-using System.Xml.Serialization;
+//using System.Xml;
+//using System.Xml.Serialization;
 using Microsoft.CSharp;
 
 namespace CommonLibs
@@ -62,97 +62,97 @@ namespace CommonLibs
 
 
 
-        public static Dictionary<string, object> ReadDictionaryFromXMLstring(string dataString)
-        {
-            Dictionary<string, object> retDict = new Dictionary<string, object>();
-            TextReader strReader = new StringReader(dataString);
-            DataSet readingDataSet = new DataSet("DataSet");
-            try
-            {
-                readingDataSet.ReadXml(strReader);
-            }
-            catch (Exception)
-            {
-                return null;
-                throw;
-            }
+        //public static Dictionary<string, object> ReadDictionaryFromXMLstring(string dataString)
+        //{
+        //    Dictionary<string, object> retDict = new Dictionary<string, object>();
+        //    TextReader strReader = new StringReader(dataString);
+        //    DataSet readingDataSet = new DataSet("DataSet");
+        //    try
+        //    {
+        //        readingDataSet.ReadXml(strReader);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return null;
+        //        throw;
+        //    }
 
-            foreach (DataTable table in readingDataSet.Tables)
-            {
-                foreach (DataRow row in table.Rows)
-                {
-                    retDict.Add(row[0] as string, row[1]);
-                }
-            }
-            readingDataSet.Dispose();
-            return retDict;
-        }
+        //    foreach (DataTable table in readingDataSet.Tables)
+        //    {
+        //        foreach (DataRow row in table.Rows)
+        //        {
+        //            retDict.Add(row[0] as string, row[1]);
+        //        }
+        //    }
+        //    readingDataSet.Dispose();
+        //    return retDict;
+        //}
 
 
 
-        public static string WriteDictionaryToXmlstring(Dictionary<string, object> dictToWrite)
-        {
-            DataSet dsToWrite = new DataSet("DataSet");
-            dsToWrite.Namespace = "NetFrameWork";
-            DataTable table = new DataTable("table");
+        //public static string WriteDictionaryToXmlstring(Dictionary<string, object> dictToWrite)
+        //{
+        //    DataSet dsToWrite = new DataSet("DataSet");
+        //    dsToWrite.Namespace = "NetFrameWork";
+        //    DataTable table = new DataTable("table");
 
-            DataColumn keyColumn = new DataColumn("key", Type.GetType("System.String"));
+        //    DataColumn keyColumn = new DataColumn("key", Type.GetType("System.String"));
 
-            DataColumn valueColumn = new DataColumn("value");
-            table.Columns.Add(keyColumn);
-            table.Columns.Add(valueColumn);
-            dsToWrite.Tables.Add(table);
+        //    DataColumn valueColumn = new DataColumn("value");
+        //    table.Columns.Add(keyColumn);
+        //    table.Columns.Add(valueColumn);
+        //    dsToWrite.Tables.Add(table);
 
-            DataRow newRow;
+        //    DataRow newRow;
 
-            foreach (KeyValuePair<string, object> pair in dictToWrite)
-            {
-                newRow = table.NewRow();
-                newRow["key"] = pair.Key;
-                newRow["value"] = pair.Value;
-                table.Rows.Add(newRow);
-            }
-            dsToWrite.AcceptChanges();
+        //    foreach (KeyValuePair<string, object> pair in dictToWrite)
+        //    {
+        //        newRow = table.NewRow();
+        //        newRow["key"] = pair.Key;
+        //        newRow["value"] = pair.Value;
+        //        table.Rows.Add(newRow);
+        //    }
+        //    dsToWrite.AcceptChanges();
 
             
-            TextWriter strWriter = new StringWriter(new StringBuilder());
-            dsToWrite.WriteXml(strWriter);
-            string retstr = strWriter.ToString();
-            return retstr;
-        }
+        //    TextWriter strWriter = new StringWriter(new StringBuilder());
+        //    dsToWrite.WriteXml(strWriter);
+        //    string retstr = strWriter.ToString();
+        //    return retstr;
+        //}
 
 
-        public static string XmlSerializeToString(object objectInstance)
-        {
-            XmlSerializer serializer = new XmlSerializer(objectInstance.GetType());
-            StringBuilder sb = new StringBuilder();
+        //public static string XmlSerializeToString(object objectInstance)
+        //{
+        //    XmlSerializer serializer = new XmlSerializer(objectInstance.GetType());
+        //    StringBuilder sb = new StringBuilder();
 
-            using (TextWriter writer = new StringWriter(sb))
-            {
-                serializer.Serialize(writer, objectInstance);
-            }
-            return sb.ToString();
-        }
-
-
-        public static T XmlDeserializeFromString<T>(string objectData)
-        {
-            return (T)XmlDeserializeFromString(objectData, typeof(T));
-        }
+        //    using (TextWriter writer = new StringWriter(sb))
+        //    {
+        //        serializer.Serialize(writer, objectInstance);
+        //    }
+        //    return sb.ToString();
+        //}
 
 
-        public static object XmlDeserializeFromString(string objectData, Type type)
-        {
-            var serializer = new XmlSerializer(type);
-            object result;
+        //public static T XmlDeserializeFromString<T>(string objectData)
+        //{
+        //    return (T)XmlDeserializeFromString(objectData, typeof(T));
+        //}
 
-            using (TextReader reader = new StringReader(objectData))
-            {
-                result = serializer.Deserialize(reader);
-            }
 
-            return result;
-        }
+        //public static object XmlDeserializeFromString(string objectData, Type type)
+        //{
+        //    var serializer = new XmlSerializer(type);
+        //    object result;
+
+        //    using (TextReader reader = new StringReader(objectData))
+        //    {
+        //        result = serializer.Deserialize(reader);
+        //    }
+
+        //    return result;
+        //}
 
 
 

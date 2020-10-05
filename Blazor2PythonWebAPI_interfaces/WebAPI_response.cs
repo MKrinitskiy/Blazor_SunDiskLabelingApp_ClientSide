@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Geometry;
+//using System.Text.Json;
+//using System.Text.Json.Serialization;
+
+
 
 namespace Blazor2PythonWebAPI_interfaces
 {
@@ -16,7 +20,9 @@ namespace Blazor2PythonWebAPI_interfaces
 
         public string ToJSON()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            string currObjectJSONstring = JsonConvert.SerializeObject(this, Formatting.Indented);
+
+            return currObjectJSONstring;
         }
     }
 }

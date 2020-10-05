@@ -19,7 +19,7 @@ namespace BlazorPaintComponent
             RectD result = new RectD();
             
             List<PointD> data = Par_obj.data.ToList();
-            data.Add(Par_obj.Position);
+            data.Add(Par_obj.Position.PtD);
 
             result.x = data.Min(j => j.X);
             result.y = data.Min(j => j.Y);

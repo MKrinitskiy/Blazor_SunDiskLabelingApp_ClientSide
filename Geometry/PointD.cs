@@ -32,31 +32,41 @@ namespace Geometry
         /// </summary>
         /// 
         /// <returns>
-        /// Значениеtrue, если оба свойства <see cref="P:System.Drawing.PointD.X"/> и <see cref="P:System.Drawing.PointD.Y"/> равны 0, в противном случае возвращается значение false.
+        /// Значение true, если оба свойства <see cref="P:System.Drawing.PointD.X"/> и <see cref="P:System.Drawing.PointD.Y"/> равны 0, в противном случае возвращается значение false.
         /// </returns>
         /// <filterpriority>1</filterpriority>
-        [Browsable(false)]
-        public bool IsEmpty
-        {
-            get
-            {
-                if (this.x == 0.0)
-                    return this.y == 0.0;
-                else
-                    return false;
-            }
-        }
+
+        //[Browsable(false)]
+        //public bool IsEmpty
+        //{
+        //    get
+        //    {
+        //        if (this.x == 0.0)
+        //            return this.y == 0.0;
+        //        else
+        //            return false;
+        //    }
+        //}
 
 
-        public bool IsNull
+        public bool GetIsNull()
+        { return nullPoint; }
+
+        /// <summary>
+        /// Получает значение, определяющее, пуст ли класс <see cref="T:System.Drawing.PointD"/>.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// Значение true, если оба свойства <see cref="P:System.Drawing.PointD.X"/> и <see cref="P:System.Drawing.PointD.Y"/> равны 0, в противном случае возвращается значение false.
+        /// </returns>
+        /// <filterpriority>1</filterpriority>
+
+        
+        public void SetIsNull(bool value)
         {
-            get { return nullPoint; }
-            set
-            {
-                this.nullPoint = value;
-                this.X = 0.0d;
-                this.Y = 0.0d;
-            }
+            this.nullPoint = value;
+            this.X = 0.0d;
+            this.Y = 0.0d;
         }
 
 
@@ -156,7 +166,7 @@ namespace Geometry
         public static PointD nullPointD()
         {
             PointD pt = new PointD();
-            pt.IsNull = true;
+            pt.SetIsNull(true);
             return pt;
         }
 
@@ -164,7 +174,7 @@ namespace Geometry
 
         public static bool isNull(PointD pt)
         {
-            return pt.IsNull;
+            return pt.GetIsNull();
         }
 
 
