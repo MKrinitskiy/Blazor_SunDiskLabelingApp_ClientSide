@@ -35,5 +35,13 @@ namespace BlazorPaintComponent.classes
             this.LabelsList = LabelsList;
             this.PresentedImageSize = PresentedImageSize;
         }
+
+
+        public string ToJSON()
+        {
+            string currObjectJSONstring = JsonConvert.SerializeObject(this, Formatting.Indented);
+
+            return currObjectJSONstring;
+        }
     }
 }

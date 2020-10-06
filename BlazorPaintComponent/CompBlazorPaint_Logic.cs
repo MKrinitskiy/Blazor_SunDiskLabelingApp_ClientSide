@@ -310,7 +310,7 @@ namespace BlazorPaintComponent
 
         protected async void RequestNextExample()
         {
-            #region request for a next image
+            #region request for the next image
 
             #region the image 
             string url = new Uri(base_webAPI_uri).Append("images?command=get_next_image&webapi_client_id=" + guid).AbsoluteUri;
@@ -372,7 +372,7 @@ namespace BlazorPaintComponent
 
             #region request existing labels
             resp = null;
-            url = new Uri(base_webAPI_uri).Append("labels?command=get_current_example_labels&webapi_client_id=" + guid).AbsoluteUri;
+            url = new Uri(base_webAPI_uri).Append("labels?command=get_current_example_labels&webapi_client_id=" + guid + "&img_basename=" + CurrentImageBasename).AbsoluteUri;
             Console.WriteLine("URL = " + url);
             strRepl = await http.GetStringAsync(url);
             try
@@ -399,16 +399,13 @@ namespace BlazorPaintComponent
                 {
                     try
                     {
-                        CurrentBackgroundImageURI = resp.StringAttributes["imageURL"];
-                        Console.WriteLine("got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI);
-                        CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
-                        Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
-
-                        CurrentImageBasename = resp.StringAttributes["imgBaseName"];
+                        ExampleLabels received_labels =
+                            JsonConvert.DeserializeObject<ExampleLabels>(resp.StringAttributes["found_example_labels"]);
+                        Console.WriteLine("got received_labels: " + received_labels.ToJSON());
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("ERROR : failed extracting CurrentBackgroundImageURI from JSON response.");
+                        Console.WriteLine("ERROR : failed extracting found_example_labels from JSON response.");
                         Console.WriteLine("got JSON response:");
                         Console.Write(strRepl);
                         Console.WriteLine("converted it to the WebAPI_response instance:");
@@ -431,7 +428,7 @@ namespace BlazorPaintComponent
 
         protected async void RequestPreviousExample()
         {
-            #region request for a next image
+            #region request for a previous image
 
             string url = new Uri(base_webAPI_uri).Append("images?command=get_previous_image&webapi_client_id=" + guid).AbsoluteUri;
             Console.WriteLine("URL = " + url);

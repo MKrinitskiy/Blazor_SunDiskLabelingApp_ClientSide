@@ -31,12 +31,12 @@ namespace BlazorPaintComponent
 
             builder.OpenElement(k++, "div");
             builder.AddAttribute(k++, "id", "listitem" + Par_ID); // + Guid.NewGuid().ToString("d").Substring(1, 4));
-            builder.AddAttribute(k++, "style", "width:400px;max-height:26px;position:relative;margin:5px");
+            builder.AddAttribute(k++, "style", "width:300px;max-height:26px;position:relative;margin:5px");
             builder.OpenElement(k++, "span");
 
             if (curr_object.Selected)
             {
-                builder.AddAttribute(k++, "style", "width:400px; position:absolute; top:0px; cursor:pointer; background-color:yellow; color:blue; border-style:solid; border-width:1px; border-color:red;");
+                builder.AddAttribute(k++, "style", "width:300px; position:absolute; top:0px; cursor:pointer; background-color:yellow; color:blue; border-style:solid; border-width:1px; border-color:red;");
             }
             else
             {
