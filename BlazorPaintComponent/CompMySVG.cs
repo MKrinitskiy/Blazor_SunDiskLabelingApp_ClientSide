@@ -141,18 +141,18 @@ namespace BlazorPaintComponent
                     stroke = currCircle.Color,
                     stroke_width = 2,
                 };
-                line circleAuxiliaryLine = new line()
-                {
-                    x1 = currCircle.Position.x,
-                    y1 = currCircle.Position.y,
-                    x2 = currCircle.end.x,
-                    y2 = currCircle.end.y,
-                    stroke = "magenta",
-                    stroke_width = 1,
-                    style = "opacity:0.7"
-                };
+                //line circleAuxiliaryLine = new line()
+                //{
+                //    x1 = currCircle.Position.x,
+                //    y1 = currCircle.Position.y,
+                //    x2 = currCircle.end.x,
+                //    y2 = currCircle.end.y,
+                //    stroke = "magenta",
+                //    stroke_width = 1,
+                //    style = "opacity:0.7"
+                //};
                 _Svg.Children.Add(currSVGCircle);
-                _Svg.Children.Add(circleAuxiliaryLine);
+                //_Svg.Children.Add(circleAuxiliaryLine);
 
                 if (currCircle.Selected)
                 {

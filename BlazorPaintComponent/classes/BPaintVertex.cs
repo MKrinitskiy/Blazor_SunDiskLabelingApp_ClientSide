@@ -18,7 +18,10 @@ namespace BlazorPaintComponent.classes
         //public int SequenceNumber { get; set; }
 
 
-        [JsonIgnore]
+        public string guid = Guid.NewGuid().ToString();
+
+
+        //[JsonIgnore]
         public string Color;
         //public double width { get; set; }
 

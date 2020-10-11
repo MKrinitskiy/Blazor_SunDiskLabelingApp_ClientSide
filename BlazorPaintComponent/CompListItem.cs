@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Rendering;
+using Newtonsoft.Json;
+
 
 namespace BlazorPaintComponent
 {
@@ -46,8 +48,12 @@ namespace BlazorPaintComponent
 
             builder.AddAttribute(k++, "onclick", new Action(() => Cmd_Item_Select(curr_object.ObjectID)));
 
-            
-            builder.AddContent(k++, curr_object.ObjectType.ToString() + "; ID = " + curr_object.ObjectID);
+
+            builder.AddContent(k++, curr_object.ObjectType.ToString() + "; guid = " + curr_object.guid);
+
+#if DEBUG
+            builder.AddContent(k++, "<br />" + JsonConvert.SerializeObject(curr_object, Formatting.Indented));
+#endif
 
             builder.CloseElement();
 
@@ -61,18 +67,13 @@ namespace BlazorPaintComponent
         {
             CompBlazorPaint p = Parent as CompBlazorPaint;
 
-
-            //if (!p.MultiSelect)
-            //{
             p.cmd_Clear_Selection();
-            //}
 
             p.cmd_Clear_Editing();
 
             p.ObjectsList.Single(x => x.ObjectID == Par_ID).Selected = true;
 
             p.cmd_RefreshSVG();
-            //p.Curr_Mode = BPaintMode.editing;
         }
 
         public void Dispose()

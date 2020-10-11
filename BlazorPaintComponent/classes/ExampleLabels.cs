@@ -39,7 +39,7 @@ namespace BlazorPaintComponent.classes
 
         public string ToJSON()
         {
-            string currObjectJSONstring = JsonConvert.SerializeObject(this, Formatting.Indented);
+            string currObjectJSONstring = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
             return currObjectJSONstring;
         }

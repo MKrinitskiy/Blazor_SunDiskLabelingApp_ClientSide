@@ -21,16 +21,16 @@ namespace BlazorPaintComponent
         //    SVGPosition = new PointD(x, y);
         //}
 
-        [JSInvokable]
-        public static void invokeFromjs_UpdateSVGPosition(string id, double rect_left, double rect_top, double rect_width, double rect_height, double window_scrollX, double window_scrollY)
-        {
-            Console.WriteLine("id = " + id + "; left = " + rect_left + "; top = " + rect_top + "; width = " +
-                              rect_width + "; height = " + rect_height + "; w_scrollX = " + window_scrollX +
-                              "; w_scrollY = " + window_scrollY);
+        //[JSInvokable]
+        //public static void invokeFromjs_UpdateSVGPosition(string id, double rect_left, double rect_top, double rect_width, double rect_height, double window_scrollX, double window_scrollY)
+        //{
+        //    Console.WriteLine("id = " + id + "; left = " + rect_left + "; top = " + rect_top + "; width = " +
+        //                      rect_width + "; height = " + rect_height + "; w_scrollX = " + window_scrollX +
+        //                      "; w_scrollY = " + window_scrollY);
 
-            //SVGPosition = new PointD(rect_left + window_scrollX, rect_top + window_scrollY);
-            SVGPosition = new PointD(rect_left, rect_top);
-        }
+        //    //SVGPosition = new PointD(rect_left + window_scrollX, rect_top + window_scrollY);
+        //    SVGPosition = new PointD(rect_left, rect_top);
+        //}
 
 
 

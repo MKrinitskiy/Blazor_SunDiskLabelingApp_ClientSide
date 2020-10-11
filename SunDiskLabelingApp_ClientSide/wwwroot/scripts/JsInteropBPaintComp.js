@@ -11,6 +11,9 @@ window.JsInteropBPaintComp = {
         //console.log("hit JsInteropBPaintComp.GetElementBoundingClientRect")
         // its a JS helper which returns the rect 
 
+        let obj_id = obj["id"]
+        //console.log("obj_id: " + obj_id)
+
         if (document.getElementById(obj["id"]) !== null)
         {
             let rect = document.getElementById(obj["id"]).getBoundingClientRect();
@@ -18,7 +21,7 @@ window.JsInteropBPaintComp = {
             //let myleft = rect.left.toFixed(2) + window.scrollX;
             //let mytop = rect.top.toFixed(2) + window.scrollY;
 
-            obj["dotnethelper"].invokeMethodAsync('invokeFromjs', obj["id"], rect.left, rect.top, rect.width, rect.height, window.scrollX, window.scrollY);
+            obj["dotnethelper"].invokeMethodAsync('invokeFromjs', obj["id"], rect.left.toString(), rect.top.toString(), rect.width.toString(), rect.height.toString(), window.scrollX.toString(), window.scrollY.toString());
             return true;
         }
         else
@@ -49,11 +52,14 @@ window.JsInteropBPaintComp = {
 
         //console.log("hit JsInteropBPaintComp.UpdateSVGPosition")
 
+        let obj_id = obj["id"]
+        //console.log("obj_id: " + obj_id)
+
         if (document.getElementById(obj["id"]) !== null)
         {
             let rect = document.getElementById(obj["id"]).getBoundingClientRect();
 
-            obj["dotnethelper"].invokeMethodAsync('invokeFromjs', obj["id"], rect.left, rect.top, rect.width, rect.height, window.scrollX, window.scrollY);
+            obj["dotnethelper"].invokeMethodAsync('invokeFromjs', obj["id"], rect.left.toString(), rect.top.toString(), rect.width.toString(), rect.height.toString(), window.scrollX.toString(), window.scrollY.toString());
             return true;
         }
         else

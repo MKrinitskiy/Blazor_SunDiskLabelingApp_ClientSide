@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
+using System.Globalization;
+
 
 namespace BlazorSvgHelper
 {
@@ -106,9 +108,14 @@ namespace BlazorSvgHelper
                     //    }
                     //}
 
-
                     if (IsAllowed)
                     {
+                        string valuestr = _value.ToString();
+                        if (_value.GetType().Equals(typeof(double)))
+                        {
+                            valuestr = ((double)_value).ToString(CultureInfo.InvariantCulture);
+                        }
+
                         _attrName = pi.Name;
 
                         if (_attrName.Equals("onclick"))
@@ -126,7 +133,8 @@ namespace BlazorSvgHelper
                         {
                             if (_attrName.Equals("content"))
                             {
-                                builder.AddContent(k++, _value.ToString());
+                                
+                                builder.AddContent(k++, valuestr);
 
                             }
                             else
@@ -136,7 +144,7 @@ namespace BlazorSvgHelper
                                     _attrName = _attrName.Replace("_", "-");
                                 }
 
-                                builder.AddAttribute(k++, _attrName, _value.ToString());
+                                builder.AddAttribute(k++, _attrName, valuestr);
                             }
 
                         }

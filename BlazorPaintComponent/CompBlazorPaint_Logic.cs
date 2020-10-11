@@ -17,24 +17,27 @@ using Microsoft.AspNetCore.Components.Web;
 //using System.Text.Json;
 //using System.Text.Json.Serialization;
 using System.IO;
+using System.Reflection;
+using System.Globalization;
 //using JsonSerializer = System.Text.Json.JsonSerializer;
 
+
+[assembly: AssemblyVersion("1.0.0.*")]
 namespace BlazorPaintComponent
 {
     public class CompBlazorPaint_Logic : ComponentBase
     {
-        // TODO: Implement saving/storing(serverside)/restoring labels.
-        // category=functionality issue=none priority=5 estimate=12h
-        // While saving labels the app should send it to server and perhaps give a user an opportunity to download it
-
+        private Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        private DateTime buildDate = DateTime.UtcNow;
+        protected string displayableVersion = "";
+        
         bool IsCompLoadedAtLeastOnce = false;
-
 
         public OperationalMode CurrOperationalMode = OperationalMode.select;
         public BPaintMode CurrPaintMode = BPaintMode.idle;
         public SelectionMode CurrSelectionMode = SelectionMode.idle;
 
-        protected CompUsedColors_Logic Curr_CompUsedColors = new CompUsedColors_Logic();
+        //protected CompUsedColors_Logic Curr_CompUsedColors = new CompUsedColors_Logic();
         protected CompMySVG Curr_CompMySVG = new CompMySVG();
 
 
@@ -42,6 +45,11 @@ namespace BlazorPaintComponent
         public BPaintRectangle bpSelectionRectangle = null;
         public List<BPaintVertex> VerticesList = new List<BPaintVertex>();
         public List<BPaintVertex> SelectionVerticesList = new List<BPaintVertex>();
+#if DEBUG
+        protected string strDebugRelease = "DEBUG";
+#else
+        protected string strDebugRelease = "RELEASE";
+#endif
 
 
         protected string Color1 = "#000000";//"#fc3807";
@@ -68,7 +76,6 @@ namespace BlazorPaintComponent
         protected string CurrentImageBasename = "";
         private string guid = (Guid.NewGuid()).ToString().Replace("-", "");
         private readonly HttpClient http = new HttpClient();
-        private string base_webAPI_uri = "http://127.0.0.1:2019/";
         protected bool webAPIsessionStarted = false;
 
         protected string btnSelectMode_CSSclass = "btn btn-primary btn-with-icons";
@@ -76,7 +83,17 @@ namespace BlazorPaintComponent
         protected bool btnSelectAllDisabled { get; set; }
         protected bool btnDeleteSelectedDisabled { get; set; }
 
-        //protected string logText { get; set; } = "";
+        [Inject]
+        public NavigationManager MyNavigationManager { get; set; }
+
+        //private string base_webAPI_uri = "http://127.0.0.1:2019/";
+        public string base_webAPI_uri
+        {
+            get
+            {
+                return MyNavigationManager.Uri + "app/";
+            }
+        }
 
 
 
@@ -91,8 +108,12 @@ namespace BlazorPaintComponent
             CurrentBackgroundImageURI = "";
 
             CurrOperationalMode = OperationalMode.select;
-            OperationalModeHasChanged(); 
-            
+            OperationalModeHasChanged();
+
+            //buildDate = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
+            displayableVersion = $"{version}";
+
+
             return base.OnInitializedAsync();
         }
 
@@ -101,7 +122,9 @@ namespace BlazorPaintComponent
 
         protected void OnScroll()
         {
-            //Console.WriteLine("hit OnScroll");
+#if DEBUG
+            Console.WriteLine("hit OnScroll");
+#endif
             BPaintJsInterop.UpdateSVGPosition("PaintArea1", DotNetObjectReference.Create(this));
             StateHasChanged();
         }
@@ -112,10 +135,10 @@ namespace BlazorPaintComponent
         {
             if (!firstRender)
             {
-                if (Curr_CompUsedColors.ActionColorClicked == null)
-                {
-                    Curr_CompUsedColors.ActionColorClicked = ColorSelected;
-                }
+                //if (Curr_CompUsedColors.ActionColorClicked == null)
+                //{
+                //    Curr_CompUsedColors.ActionColorClicked = ColorSelected;
+                //}
 
                 GetBoundingClientRect("PaintArea1");
 
@@ -127,8 +150,26 @@ namespace BlazorPaintComponent
 
 
 
+#region SDS buttons
+        protected void btnSetSDS_nosun_onclick(MouseEventArgs eventArgs)
+        {
+            
+        }
 
-        #region operational modes
+        protected void btnSetSDS_PartiallyCloudy_onclick(MouseEventArgs eventArgs)
+        {
+
+        }
+
+        protected void btnSetSDS_Sun2_onclick(MouseEventArgs eventArgs)
+        {
+
+        }
+#endregion
+
+
+
+#region operational modes
 
         protected void btnSelectMode_onClick(MouseEventArgs eventArgs)
         {
@@ -173,14 +214,14 @@ namespace BlazorPaintComponent
             StateHasChanged();
         }
 
-        #endregion
+#endregion
 
 
 
 
 
 
-        #region web API functions
+#region web API functions
 
 
         protected async void btnPrevExample_onClick()
@@ -194,7 +235,19 @@ namespace BlazorPaintComponent
         }
 
 
-        
+        protected async void btnNextExample_onClick()
+        {
+            bool webAPIsessionStarted = await EnsureWebAPIsessionStarted();
+            if (webAPIsessionStarted)
+            {
+                RequestNextExample();
+            }
+
+            ClearAllObjects();
+        }
+
+
+
         protected async Task<bool> EnsureWebAPIsessionStarted()
         {
             if (webAPIsessionStarted)
@@ -203,47 +256,46 @@ namespace BlazorPaintComponent
             }
 
             string url = new Uri(base_webAPI_uri).Append("exec?command=start&webapi_client_id=" + guid).AbsoluteUri;
+#if DEBUG
             Console.WriteLine("btnStartWebAPIsession_onClick: HTTP GET");
             Console.WriteLine("URL = " + url);
-            //logText += "btnStartWebAPIsession_onClick: HTTP GET" + Environment.NewLine;
-            //logText += "URL = " + url + Environment.NewLine;
+#endif
             HttpClient http = new HttpClient();
             string strRepl = await http.GetStringAsync(url);
 
             WebAPI_response resp = null;
             try
             {
-                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl);
+                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl, new JsonSerializerSettings{TypeNameHandling = TypeNameHandling.All});
             }
             catch (Exception e)
             {
+#if DEBUG
                 Console.WriteLine(e);
-                //logText += e.ToString() + Environment.NewLine;
+#endif
                 throw;
             }
 
             if (resp == null)
             {
+#if DEBUG
                 Console.WriteLine("ERROR: failed deserializing WebAPI response");
-                //logText += "ERROR: failed deserializing WebAPI response" + Environment.NewLine;
+#endif
                 return false;
             }
 
             if (resp.ResponseCode == ResponseCodes.Error)
             {
-                //logText += "ERROR : failed starting a WebAPI session:" + Environment.NewLine;
-                //logText += "Error code: " + resp.Error.ErrorCode + Environment.NewLine;
-                //logText += "Error message: " + resp.Error.ErrorDescription + Environment.NewLine;
-
+#if DEBUG
                 Console.WriteLine("ERROR : failed starting a WebAPI session:");
                 Console.WriteLine("Error code: " + resp.Error.ErrorCode);
                 Console.WriteLine("Error message: " + resp.Error.ErrorDescription);
+#endif
                 return false;
             }
             else if (resp.ResponseCode == ResponseCodes.OK)
             {
                 Console.WriteLine("OK : WebAPI session started successfully!");
-                //logText += "OK : WebAPI session started successfully!" + Environment.NewLine;
                 webAPIsessionStarted = true;
                 return true;
             }
@@ -264,29 +316,23 @@ namespace BlazorPaintComponent
 
             
             string url = new Uri(base_webAPI_uri).Append("labels?command=post_current_example_labels&webapi_client_id=" + guid).AbsoluteUri;
+#if DEBUG
             Console.WriteLine("URL = " + url);
+#endif
 
             ExampleLabels labelsPackage = new ExampleLabels(CurrentImageBasename, ObjectsList, PaintAreaSize);
-            //XmlSerializer serializer = new XmlSerializer(typeof(ExampleLabels));
 
-            //XmlSerializer serializer = new XmlSerializer(typeof(List<BPaintObject>));
-            //TextWriter writer = new StringWriter();
-            //serializer.Serialize(writer, ObjectsList);
-            //serializer.Serialize(writer, labelsPackage);
-            //writer.Close();
+            string currExampleLabelsJSONstring = JsonConvert.SerializeObject(labelsPackage, Formatting.Indented, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
-            string currExampleLabelsJSONstring = JsonConvert.SerializeObject(labelsPackage, Formatting.Indented);
-
-
-            //string currExampleLabelsJSON = JsonConvert.SerializeObject(ObjectsList);
-            //Console.WriteLine("currExampleLabelsJSON: ");
-            //Console.WriteLine(currExampleLabelsJSON);
-            //string currExampleLabelsXMLstring = writer.ToString();
+#if DEBUG
             Console.WriteLine("currExampleLabelsJSONstring: ");
             Console.WriteLine(currExampleLabelsJSONstring);
+#endif
             HttpResponseMessage response = await http.PostAsync(url, new StringContent(currExampleLabelsJSONstring), CancellationToken.None);
             HttpStatusCode respCode = response.StatusCode;
+#if DEBUG
             Console.WriteLine("response status code: " + respCode);
+#endif
             if (respCode != HttpStatusCode.OK)
             {
                 
@@ -297,214 +343,230 @@ namespace BlazorPaintComponent
 
 
 
-        protected async void btnNextExample_onClick()
+        
+
+
+
+        protected async Task<bool> RequestImageURL(string request_type = "get_next_image")
         {
-            bool webAPIsessionStarted = await EnsureWebAPIsessionStarted();
-            if (webAPIsessionStarted)
-            {
-                RequestNextExample();
-            }
-
-            ClearAllObjects();
-        }
-
-        protected async void RequestNextExample()
-        {
-            #region request for the next image
-
-            #region the image 
-            string url = new Uri(base_webAPI_uri).Append("images?command=get_next_image&webapi_client_id=" + guid).AbsoluteUri;
+            string url = new Uri(base_webAPI_uri).Append("images?command=" + request_type + "&webapi_client_id=" + guid).AbsoluteUri;
+#if DEBUG
             Console.WriteLine("URL = " + url);
-            //logText += "URL = " + url + Environment.NewLine;
+#endif
+
             string strRepl = await http.GetStringAsync(url);
 
             WebAPI_response resp = null;
             try
             {
-                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl);
+                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             }
             catch (Exception e)
             {
+#if DEBUG
                 Console.WriteLine(e);
-                //logText += e.ToString() + Environment.NewLine;
+#endif
                 throw;
             }
 
             if (resp == null)
             {
+#if DEBUG
                 Console.WriteLine("ERROR: failed deserializing WebAPI response");
-                //logText += "ERROR: failed deserializing WebAPI response" + Environment.NewLine;
-                return;
+#endif
+                return false;
             }
+
 
             if (resp.ResponseCode == ResponseCodes.Error)
             {
                 WebAPI_error currError = resp.Error;
+#if DEBUG
                 Console.WriteLine("WebAPI ERROR code : " + currError.ErrorCode);
                 Console.WriteLine("WebAPI ERROR description : " + currError.ErrorDescription);
                 Console.WriteLine("Response JSON: ");
                 Console.Write(resp.ToJSON());
+#endif
             }
             else
             {
                 try
                 {
                     CurrentBackgroundImageURI = resp.StringAttributes["imageURL"];
+#if DEBUG
                     Console.WriteLine("got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI);
-                    CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
+#endif
+                    CurrentBackgroundImageURI = new Uri(MyNavigationManager.Uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
+#if DEBUG
                     Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
-
+#endif
                     CurrentImageBasename = resp.StringAttributes["imgBaseName"];
+
+                    StateHasChanged();
                 }
                 catch (Exception e)
                 {
+#if DEBUG
                     Console.WriteLine("ERROR : failed extracting CurrentBackgroundImageURI from JSON response.");
                     Console.WriteLine("got JSON response:");
                     Console.Write(strRepl);
                     Console.WriteLine("converted it to the WebAPI_response instance:");
                     Console.Write(resp.ToJSON());
                     Console.WriteLine(e);
-                    return;
+#endif
+                    return false;
                 }
             }
 
-            #endregion the image
+            return true;
+        }
 
-            #region request existing labels
-            resp = null;
-            url = new Uri(base_webAPI_uri).Append("labels?command=get_current_example_labels&webapi_client_id=" + guid + "&img_basename=" + CurrentImageBasename).AbsoluteUri;
+
+
+        protected async Task<bool> RequestExistingLabels()
+        {
+            WebAPI_response resp = null;
+            string url = new Uri(base_webAPI_uri).Append("labels?command=get_current_example_labels&webapi_client_id=" + guid + "&img_basename=" + CurrentImageBasename).AbsoluteUri;
+
+#if DEBUG
             Console.WriteLine("URL = " + url);
-            strRepl = await http.GetStringAsync(url);
+#endif
+            string strRepl = await http.GetStringAsync(url);
+
             try
             {
-                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl);
+                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             }
             catch (Exception e)
             {
+#if DEBUG
                 Console.WriteLine(e);
                 Console.WriteLine("ERROR: failed deserializing WebAPI response");
+                return false;
+#endif
             }
 
-            
+
             if (resp != null)
             {
                 if (resp.ResponseCode == ResponseCodes.Error)
                 {
+#if DEBUG
                     WebAPI_error currError = resp.Error;
                     Console.WriteLine("WebAPI ERROR code : " + currError.ErrorCode);
                     Console.WriteLine("WebAPI ERROR description : " + currError.ErrorDescription);
                     Console.WriteLine("Response JSON: ");
+                    return false;
+#endif
                 }
                 else
                 {
                     try
                     {
-                        ExampleLabels received_labels =
-                            JsonConvert.DeserializeObject<ExampleLabels>(resp.StringAttributes["found_example_labels"]);
+                        ExampleLabels received_labels = JsonConvert.DeserializeObject<ExampleLabels>(resp.StringAttributes["found_example_labels"], new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+#if DEBUG
                         Console.WriteLine("got received_labels: " + received_labels.ToJSON());
+#endif
+                        foreach (BPaintObject bpobj in received_labels.LabelsList)
+                        {
+                            try
+                            {
+#if DEBUG
+                                Console.WriteLine("post-processing BPaintObject");
+#endif
+                                bpobj.PostJsonDeserializationCleaning();
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
+                            
+                            ObjectsList.Add(bpobj);
+
+                            if (ObjectsList.Any())
+                            {
+                                bpobj.ObjectID = ObjectsList.Max(x => x.ObjectID) + 1;
+                                cmd_Clear_Selection();
+                                cmd_Clear_Editing();
+                            }
+                            else
+                            {
+                                bpobj.ObjectID = 1;
+                            }
+
+                            foreach (BPaintVertex v in bpobj.VerticesList)
+                            {
+#if DEBUG
+                                Console.WriteLine("Adding " + bpobj.VerticesList.Count.ToString() + " vertices to this frame");
+#endif
+                                VerticesList.Add(v);
+                            }
+                        }
+
+                        cmd_RefreshSVG();
+
+                        return true;
                     }
                     catch (Exception e)
                     {
+#if DEBUG
                         Console.WriteLine("ERROR : failed extracting found_example_labels from JSON response.");
                         Console.WriteLine("got JSON response:");
                         Console.Write(strRepl);
                         Console.WriteLine("converted it to the WebAPI_response instance:");
                         Console.Write(resp.ToJSON());
                         Console.WriteLine(e);
-                        return;
+#endif
+                        return false;
                     }
                 }
             }
-
-            #endregion request existing labels
-
-            StateHasChanged();
-
-            #endregion
+            return true;
         }
 
+
+
+        protected async void RequestNextExample()
+        {
+            bool requestedImage = await RequestImageURL(request_type: "get_next_image");
+            bool requestedLabels = await RequestExistingLabels();
+            StateHasChanged();
+        }
 
 
 
         protected async void RequestPreviousExample()
         {
-            #region request for a previous image
-
-            string url = new Uri(base_webAPI_uri).Append("images?command=get_previous_image&webapi_client_id=" + guid).AbsoluteUri;
-            Console.WriteLine("URL = " + url);
-            string strRepl = await http.GetStringAsync(url);
-
-            WebAPI_response resp = null;
-            try
-            {
-                resp = JsonConvert.DeserializeObject<WebAPI_response>(strRepl);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                //logText += e.ToString() + Environment.NewLine;
-                throw;
-            }
-
-            if (resp == null)
-            {
-                Console.WriteLine("ERROR: failed deserializing WebAPI response");
-                //logText += "ERROR: failed deserializing WebAPI response" + Environment.NewLine;
-                return;
-            }
-
-            try
-            {
-                CurrentBackgroundImageURI = resp.StringAttributes["imageURL"];
-                Console.WriteLine("got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI);
-                //logText += "got CurrentBackgroundImageURI value: " + CurrentBackgroundImageURI + Environment.NewLine;
-                CurrentBackgroundImageURI = new Uri(base_webAPI_uri).Append(CurrentBackgroundImageURI).AbsoluteUri;
-                Console.WriteLine("now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI);
-                //logText += "now CurrentBackgroundImageURI: " + CurrentBackgroundImageURI + Environment.NewLine;
-
-                CurrentImageBasename = resp.StringAttributes["imgBaseName"];
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("ERROR : failed extracting CurrentBackgroundImageURI from JSON response.");
-                Console.WriteLine("got JSON response:");
-                Console.Write(strRepl);
-                Console.WriteLine("converted it to the WebAPI_response instance:");
-                Console.Write(resp.ToJSON());
-                Console.WriteLine(e);
-                return;
-            }
-
+            bool requestedImage = await RequestImageURL(request_type: "get_previous_image");
+            bool requestedLabels = await RequestExistingLabels();
             StateHasChanged();
-
-            #endregion
         }
-
-
 
 
         #endregion
 
 
-        private void ColorSelected(string a)
-        {
-            Console.WriteLine("CompBlazorPaint.ColorSelected() hit; string a = " + a);
-            Color1 = a;
+//        private void ColorSelected(string a)
+//        {
+//#if DEBUG
+//            Console.WriteLine("CompBlazorPaint.ColorSelected() hit; string a = " + a);
+//#endif
+//            Color1 = a;
             
-            if (ObjectsList.Any())
-            {
-                foreach (var item in ObjectsList.Where(x => x.Selected))
-                {
-                    item.Color = Color1;
-                    foreach(BPaintVertex v in item.VerticesList)
-                    {
-                        v.Color = Color1;
-                    }
-                }
-            }
+//            if (ObjectsList.Any())
+//            {
+//                foreach (var item in ObjectsList.Where(x => x.Selected))
+//                {
+//                    item.Color = Color1;
+//                    foreach(BPaintVertex v in item.VerticesList)
+//                    {
+//                        v.Color = Color1;
+//                    }
+//                }
+//            }
             
-            StateHasChanged();
-        }
+//            StateHasChanged();
+//        }
 
                 
 
@@ -720,8 +782,7 @@ namespace BlazorPaintComponent
 
             PointD CurrPosition = new PointD(e.ClientX - LocalData.SVGPosition.X, e.ClientY - LocalData.SVGPosition.Y);
             currMouseLocation = CurrPosition;
-            strCurrMouseLocation = "x: " + currMouseLocation.X.ToString("F2") + "; y: " +
-                                   currMouseLocation.Y.ToString("F2");
+            strCurrMouseLocation = "x: " + currMouseLocation.X.ToString("F2") + "; y: " + currMouseLocation.Y.ToString("F2");
 
             if (CurrOperationalMode == OperationalMode.select)
             {
@@ -1147,20 +1208,29 @@ namespace BlazorPaintComponent
 
         protected void ClearAllObjects()
         {
+            if (VerticesList.Any())
+            {
+                VerticesList.Clear();
+            }
+
+
             if (ObjectsList.Any())
             {
-                List<BPaintObject> objectsToDelete = ObjectsList;
-                foreach (BPaintObject bpObjectToDelete in objectsToDelete)
-                {
-                    foreach (BPaintVertex vertex in bpObjectToDelete.VerticesList)
-                    {
-                        VerticesList.Remove(vertex);
-                    }
-                    ObjectsList.Remove(bpObjectToDelete);
-                }
+                ObjectsList.Clear();
+                //List<BPaintObject> objectsToDelete = ObjectsList;
+                //foreach (BPaintObject bpObjectToDelete in objectsToDelete)
+                //{
+                //    foreach (BPaintVertex vertex in bpObjectToDelete.VerticesList)
+                //    {
+                //        VerticesList.Remove(vertex);
+                //    }
+                //    ObjectsList.Remove(bpObjectToDelete);
+                //}
 
-                cmd_RefreshSVG();
+                //cmd_RefreshSVG();
             }
+
+            cmd_RefreshSVG();
         }
 
 
@@ -1176,36 +1246,38 @@ namespace BlazorPaintComponent
 
 
 
-        protected void cmd_ColorChange(ChangeEventArgs e)
-        {
-            Console.WriteLine("Hit cmd_ColorChange(), e = " + e.ToString());
-            if (e?.Value != null)
-            {
-                Color1 = e.Value as string;
+//        protected void cmd_ColorChange(ChangeEventArgs e)
+//        {
+//#if DEBUG
+//            Console.WriteLine("Hit cmd_ColorChange(), e = " + e.ToString());
+//#endif
+//            if (e?.Value != null)
+//            {
+//                Color1 = e.Value as string;
 
-                if (Curr_CompUsedColors.UsedColors_List.Any(x => x == Color1))
-                {
-                    Curr_CompUsedColors.UsedColors_List.Remove(Curr_CompUsedColors.UsedColors_List.Single(x => x == Color1));
-                }
+//                if (Curr_CompUsedColors.UsedColors_List.Any(x => x == Color1))
+//                {
+//                    Curr_CompUsedColors.UsedColors_List.Remove(Curr_CompUsedColors.UsedColors_List.Single(x => x == Color1));
+//                }
 
-                if (Curr_CompUsedColors.UsedColors_List.Count > 9)
-                {
-                    Curr_CompUsedColors.UsedColors_List.RemoveAt(0);
-                }
+//                if (Curr_CompUsedColors.UsedColors_List.Count > 9)
+//                {
+//                    Curr_CompUsedColors.UsedColors_List.RemoveAt(0);
+//                }
 
-                Curr_CompUsedColors.UsedColors_List.Add(Color1);
+//                Curr_CompUsedColors.UsedColors_List.Add(Color1);
 
-                Cmd_RefreshUsedColorsSVG();
-            }
-        }
+//                Cmd_RefreshUsedColorsSVG();
+//            }
+//        }
 
 
 
-        public void Cmd_RefreshUsedColorsSVG()
-        {
-            Curr_CompUsedColors.Refresh();
-            StateHasChanged();
-        }
+        //public void Cmd_RefreshUsedColorsSVG()
+        //{
+        //    Curr_CompUsedColors.Refresh();
+        //    StateHasChanged();
+        //}
 
 
 
@@ -1253,18 +1325,58 @@ namespace BlazorPaintComponent
 
         
         [JSInvokable]
-        public void invokeFromjs(string id, double rect_left, double rect_top, double rect_width, double rect_height, double window_scrollX, double window_scrollY)
+        public void invokeFromjs(string id, string rect_left, string rect_top, string rect_width, string rect_height, string window_scrollX, string window_scrollY)
         {
-            LocalData.SVGPosition = new PointD(rect_left, rect_top);
-            //Console.WriteLine("invokeFromjs: id = " + id);
-            //Console.WriteLine("rect_left = " + rect_left.ToString());
-            //Console.WriteLine("rect_top = " + rect_top.ToString());
-            //Console.WriteLine("rect_width = " + rect_width.ToString());
-            //Console.WriteLine("rect_height = " + rect_height.ToString());
-            //Console.WriteLine("window_scrollX = " + window_scrollX.ToString());
-            //Console.WriteLine("window_scrollY = " + window_scrollY.ToString());
-            PaintAreaSize.Width = rect_width;
-            PaintAreaSize.Height= rect_height;
+#if DEBUG
+            //Console.WriteLine("invokeFromjs hit. Got strings: ");
+            //List<string> args = new List<string>() { rect_left, rect_top, rect_width, rect_height, window_scrollX, window_scrollY };
+            //List<string> names = new List<string>() { "rect_left", "rect_top", "rect_width", "rect_height", "window_scrollX", "window_scrollY" };
+            //var zipped = args.Zip(names, (a,n) => new Tuple<string, string>(a, n));
+            //foreach (Tuple<string, string> z in zipped)
+            //{
+            //    Console.WriteLine(z.Item2 + ": " + z.Item1);
+            //}
+#endif
+
+            double d_rect_left = double.NaN;
+            double d_rect_top = double.NaN;
+            double d_rect_width = double.NaN;
+            double d_rect_height = double.NaN;
+            double d_window_scrollX = double.NaN;
+            double d_window_scrollY = double.NaN;
+            bool successfully_converted_coordinates = false;
+
+            try
+            {
+                d_rect_left = Convert.ToDouble(rect_left.Replace(',', '.'), CultureInfo.InvariantCulture);
+                d_rect_top = Convert.ToDouble(rect_top.Replace(',', '.'), CultureInfo.InvariantCulture);
+                d_rect_width = Convert.ToDouble(rect_width.Replace(',', '.'), CultureInfo.InvariantCulture);
+                d_rect_height = Convert.ToDouble(rect_height.Replace(',', '.'), CultureInfo.InvariantCulture);
+                d_window_scrollX = Convert.ToDouble(window_scrollX.Replace(',', '.'), CultureInfo.InvariantCulture);
+                d_window_scrollY = Convert.ToDouble(window_scrollY.Replace(',', '.'), CultureInfo.InvariantCulture);
+                successfully_converted_coordinates = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            if (successfully_converted_coordinates)
+            {
+                try
+                {
+                    LocalData.SVGPosition = new PointD(d_rect_left, d_rect_top);
+                    PaintAreaSize.Width = d_rect_width;
+                    PaintAreaSize.Height = d_rect_height;
+                    //StateHasChanged();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
+            }
+
+
         }
     }
 }

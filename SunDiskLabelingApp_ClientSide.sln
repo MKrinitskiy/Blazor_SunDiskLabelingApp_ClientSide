@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWindowHelper", "Blazo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSvgHelper", "BlazorSvgHelper\BlazorSvgHelper.csproj", "{28B27AE7-9695-4EBA-9CDA-DCCB6D8B9FEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorPaintComponent", "BlazorPaintComponent\BlazorPaintComponent.csproj", "{C3B1231E-CC54-48F3-9671-781AFA0274F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorPaintComponent", "BlazorPaintComponent\BlazorPaintComponent.csproj", "{C3B1231E-CC54-48F3-9671-781AFA0274F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLibs", "CommonLibs\CommonLibs.csproj", "{97E9F5E8-4C2A-4927-BF63-B3F2323DA158}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SunDiskLabelingApp_ClientSide", "SunDiskLabelingApp_ClientSide\SunDiskLabelingApp_ClientSide.csproj", "{C8DC4486-F796-4315-9FFF-F915FDB2086E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDiskLabelingApp_ClientSide", "SunDiskLabelingApp_ClientSide\SunDiskLabelingApp_ClientSide.csproj", "{C8DC4486-F796-4315-9FFF-F915FDB2086E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,5 +68,6 @@ Global
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		version = 1.0.*.*
 	EndGlobalSection
 EndGlobal
